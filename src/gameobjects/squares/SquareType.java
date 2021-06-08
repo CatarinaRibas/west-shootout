@@ -9,7 +9,11 @@ public enum SquareType {
     BATTLE_GREEN(Color.GREEN),
     BAD_LUCK(Color.RED),
     COVER(Color.LIGHT_GRAY),
-    DEATH(Color.BLACK);
+    DEATH(Color.BLACK),
+    SLIDE_EAST(Color.WHITE),
+    SLIDE_WEST(Color.WHITE),
+    SLIDE_NORTH(Color.WHITE),
+    SLIDE_SOUTH(Color.WHITE);
 
     private Color color;
 
