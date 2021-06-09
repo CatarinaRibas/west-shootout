@@ -10,7 +10,7 @@ public class SlideSquare extends Square{
     public SlideSquare(int xPos, int yPos, SquareType squareType) {
         super(xPos, yPos, squareType);
     }
-    
+
     public boolean effect(Player player, Board board) {
         switch (squareType) {
             case SLIDE_EAST:

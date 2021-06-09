@@ -15,20 +15,34 @@ public class Game {
     }
 
     public void setPlayers(int numPlayers) {
+
         this.players = new Player[numPlayers];
+
         for (int i = 0; i < this.players.length; i++) {
+
             players[i] = ObjectFactory.createPlayer(i + 1);
+
             switch (players[i].getPlayerNumber()) {
                 case 1:
                     players[i].move(board.getGrid()[1][0]);
+                    break;
                 case 2:
                     players[i].move(board.getGrid()[9][10]);
+                    break;
                 case 3:
-                    players[i].move(board.getGrid()[0][9]);
+                    players[i].move(board.getGrid()[10][1]);
+                    break;
                 case 4:
-                    players[i]
+                    players[i].move(board.getGrid()[0][10]);
+                    break;
             }
         }
+    }
+
+    public boolean mainMenu() {
+        MainMenuGFX mainMenu = new MainMenuGFX();
+        mainMenu.show();
+        return true;
     }
 
     public boolean play() {
