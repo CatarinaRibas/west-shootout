@@ -26,7 +26,7 @@ public class Player {
 
         this.isWinner = false;
 
-        this.gun = new Gun();
+        this.gun = ObjectFactory.createGun();
 
         this.maxLives = START_LIVES;
         this.currentLives = this.maxLives;
