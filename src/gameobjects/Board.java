@@ -19,6 +19,12 @@ public class Board {
         return grid;
     }
 
+
+    // Fills the grid with the appropriate specific square objects in the appropriate coordinates. Other positions not used in game are left null.
+    // Organized by board sections: Board ring is outer square of board, divided into 4 corridors (N, W, E, S), Paths are alternatives connectors
+    // placed at border corridors' corners. They connect one corridor with its adjacent one of the appropriate corner (e.g NW path connects West
+    // corridor to North Corridor through alternative path.
+    // ONLY PLACES BOARDS, DOES NOT DEFINE GO-TO CONNECTIONS BETWEEN SQUARES. See boardConnect() for that.
     public void boardPopulate() {
 
         // Outer Board Ring
@@ -127,6 +133,13 @@ public class Board {
 
     }
 
+    // Sets each previously populated Square's next connection to the appropriate following square by design.
+    // Most squares connect only to one of their neighbours (to force one single movement direction), but some branch
+    // into the path and canyon sections of the board, before reconnecting to the outer square somewhere.
+    // These branching squares make use of their nextSquareA and nextSquareB, and assign each to the next square in
+    // the corresponding branches. Single-heading squares only set nextSquareA, and nextSquareB is left null.
+    // Player class and Square class logic should check allowed movement by checking nextSquareA and nextSquareB when
+    // implementing movement methods.
     public void boardConnect() {
 
         //Board ring
