@@ -1,16 +1,20 @@
 package gameobjects.squares;
 
+import gameobjects.Board;
+import gameobjects.Player;
+
 public abstract class Square {
 
     private int xPos;
     private int yPos;
-    private int numNextSquares;
     private Square nextSquareA;
     private Square nextSquareB;
+    private SquareType squareType;
 
-    public Square(int xPos, int yPos) {
+    public Square(int xPos, int yPos, SquareType squareType) {
         this.xPos = xPos;
         this.yPos = yPos;
+        this.squareType = squareType;
     }
 
     public int getxPos() {
@@ -37,11 +41,7 @@ public abstract class Square {
         this.nextSquareB = nextSquareB;
     }
 
-    public int getNumNextSquares() {
-        return numNextSquares;
-    }
-
-    public void setNumNextSquares(int numNextSquares) {
-        this.numNextSquares = numNextSquares;
+    public SquareType getSquareType() {
+        return squareType;
     }
 }
