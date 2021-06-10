@@ -62,7 +62,7 @@ public class Player {
         this.movesLeft = 0;
     }
 
-    public void chooseAction(Dice dice) {
+    public void chooseAction() {
 
         this.willShoot = false;
         this.willMove = false;
@@ -124,56 +124,102 @@ public class Player {
 
         Player[] availableTargets = availableTargets();
 
-        if (availableTargets[0].equals(null) && availableTargets[1].equals(null)) {
+        if (availableTargets[0].equals(null) && availableTargets[1].equals(null) && availableTargets[2].equals(null)) {
             gun.setRemainingBullets(gun.getRemainingBullets() - 1);
             game.getBoardGFX().updateBullets();
             game.getBoardGFX().showBang();
             return true;
         }
 
-        if (!availableTargets[0].equals(null) && availableTargets[1].equals(null)) {
+        if (!availableTargets[0].equals(null) && availableTargets[1].equals(null) && availableTargets[2].equals(null)) {
             fireAt(availableTargets[0]);
-            game.getBoardGFX().showBang();
             return true;
         }
 
-        if (availableTargets[0].equals(null) && !availableTargets[1].equals(null)) {
+        if (availableTargets[0].equals(null) && !availableTargets[1].equals(null) && availableTargets[2].equals(null)) {
             fireAt(availableTargets[1]);
-            game.getBoardGFX().showBang();
             return true;
         }
 
-        game.getBoardGFX().showTargets(availableTargets);
-        while (!targetA || !targetB) {
-        }
-
-        if (targetA) {
-            fireAt(availableTargets[0]);
-            game.getBoardGFX().showBang();
+        if (availableTargets[0].equals(null) && availableTargets[1].equals(null) && !availableTargets[2].equals(null)) {
+            fireAt(availableTargets[2]);
             return true;
         }
 
-        if (targetB) {
-            fireAt(availableTargets[1]);
-            game.getBoardGFX().showBang();
+        if (!availableTargets[0].equals(null) && !availableTargets[1].equals(null) && availableTargets[2].equals(null)) {
+            chooseFromTwo(availableTargets[0], availableTargets[1]);
             return true;
         }
 
+        if (availableTargets[0].equals(null) && !availableTargets[1].equals(null) && !availableTargets[2].equals(null)) {
+            chooseFromTwo(availableTargets[1], availableTargets[2]);
+            return true;
+        }
+
+        if (!availableTargets[0].equals(null) && availableTargets[1].equals(null) && !availableTargets[2].equals(null)) {
+            chooseFromTwo(availableTargets[0], availableTargets[2]);
+            return true;
+        }
+
+        if (!availableTargets[0].equals(null) && !availableTargets[1].equals(null) && !availableTargets[2].equals(null)) {
+            chooseFromThree(availableTargets[0], availableTargets[1], availableTargets[2]);
+            return true;
+        }
         return false;
     }
 
     public void chooseFromTwo(Player targetA, Player targetB) {
 
+        this.targetA = false;
+        this.targetB = false;
+
+        game.getBoardGFX().showTargets();
+
+        while (!this.targetA || !this.targetB) {
+        }
+
+        if (this.targetA) {
+            fireAt(targetA);
+            return;
+        }
+
+        if (this.targetB) {
+            fireAt(targetB);
+            return;
+        }
     }
 
     public void chooseFromThree(Player targetA, Player targetB, Player targetC) {
 
+        this.targetA = false;
+        this.targetB = false;
+        this.targetC = false;
+
+        game.getBoardGFX().showTargets();
+
+        while (!this.targetA || !this.targetB || !this.targetC) {
+        }
+
+        if (this.targetA) {
+            fireAt(targetA);
+            return;
+        }
+
+        if (this.targetB) {
+            fireAt(targetB);
+            return;
+        }
+
+        if (this.targetC) {
+            fireAt(targetC);
+            return;
+        }
     }
 
     public Player[] availableTargets() {
 
         int index = 0;
-        Player[] returnTargets = new Player[2];
+        Player[] returnTargets = new Player[3];
 
         for (Player player : game.getPlayers()) {
 
@@ -187,8 +233,7 @@ public class Player {
 
                 returnTargets[index] = player;
 
-            }
-            else {
+            } else {
 
                 returnTargets[index] = null;
             }
@@ -209,34 +254,48 @@ public class Player {
         }
 
         return false;
+
     }
+
 
     // Sets player as winner when game detects all other players' isDead flags have been raised.
     public void win() {
+
         isWinner = true;
+
     }
+
 
     // Asks gun to shoot a specified opponent. Politely.
     // Gun checks for bullets left as a precaution, but fireAt() should not be invokeable if gun is out of ammo.
     // westshootout.Game logic should permit calls to this method only if they would return true. (= option to shoot should be "greyed out" if the gun is empty)
     // Square logic should condition valid players to shoot (only others in same color of Battle Square).
     public boolean fireAt(Player player) {
+
         game.getBoardGFX().showBang();
+        game.getBoardGFX().updateBullets();
         return gun.shoot(player);
+
     }
+
 
     //Handles getting shot by another player. Removes one life and checks if there are any remaining lives with checkdead().
     public void getShot() {
+
         currentLives--;
         game.getBoardGFX().updateLives();
         checkDead();
+
     }
+
 
     // Tells gun to reload, firmly.
     // westshootout.Game logic should only allow this option to be invoked if there are no bullets left in gun. Boolean return is simply for debugging.
     // reload() should only be allowed to return true. Situations where it would return false should not happen as per game logic conditions.
     public boolean reload() {
+
         return gun.reload();
+
     }
 
     public boolean prepareMove() {
@@ -249,15 +308,20 @@ public class Player {
         setMovesLeft(game.getDice().roll());
         this.game.getBoardGFX().setDice(game.getDice().getResult());
         move();
+
         return true;
 
     }
 
     public boolean move() {
+
         while (movesLeft > 0) {
+
             hasMovedToA = false;
             hasMovedToB = false;
+
             this.game.getBoardGFX().setMovesLeft(this.movesLeft);
+
             while (!hasMovedToA || !hasMovedToB) {
             }
             if (hasMovedToA) {
@@ -269,9 +333,11 @@ public class Player {
             if (hasMovedToB && currentSquare.getNextSquareA() == null) {
                 currentSquare = currentSquare.getNextSquareA();
             }
+
             movesLeft--;
             game.getBoardGFX().updatePositions();
         }
+
         currentSquare.effect(this);
         return true;
     }

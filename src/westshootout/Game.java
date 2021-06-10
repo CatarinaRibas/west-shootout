@@ -64,7 +64,7 @@ public class Game {
 
             for (Player player : players) {
 
-                player.chooseAction(dice);
+                player.chooseAction();
 
                 if (checkVictory()) {
                     break;
