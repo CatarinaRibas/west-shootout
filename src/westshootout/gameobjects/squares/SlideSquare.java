@@ -1,7 +1,7 @@
-package gameobjects.squares;
+package westshootout.gameobjects.squares;
 
-import gameobjects.Board;
-import gameobjects.Player;
+import westshootout.gameobjects.Board;
+import westshootout.gameobjects.Player;
 
 public class SlideSquare extends Square{
 

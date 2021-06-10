@@ -1,4 +1,4 @@
-package gameobjects.squares;
+package westshootout.gameobjects.squares;
 
 import org.academiadecodigo.simplegraphics.graphics.Color;
 

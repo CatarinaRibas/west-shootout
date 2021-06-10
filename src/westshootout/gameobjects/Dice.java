@@ -1,4 +1,4 @@
-package gameobjects;
+package westshootout.gameobjects;
 
 public class Dice {
 
@@ -10,4 +10,7 @@ public class Dice {
         return result;
     }
 
+    public int getResult() {
+        return result;
+    }
 }

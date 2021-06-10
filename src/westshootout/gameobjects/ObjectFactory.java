@@ -1,6 +1,8 @@
-package gameobjects;
+package westshootout.gameobjects;
 
-import gameobjects.squares.*;
+import westshootout.gameobjects.squares.*;
+import westshootout.*;
+
 
 public class ObjectFactory {
 
@@ -46,8 +48,8 @@ public class ObjectFactory {
         return new Dice();
     }
 
-    public static Player createPlayer(int playerNum) {
-        return new Player(playerNum);
+    public static Player createPlayer(int playerNum, Game game) {
+        return new Player(playerNum, game);
     }
 
 }

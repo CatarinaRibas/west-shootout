@@ -1,6 +1,6 @@
-package gameobjects.squares;
+package westshootout.gameobjects.squares;
 
-import gameobjects.Player;
+import westshootout.gameobjects.Player;
 
 public class DeathSquare extends Square {
 

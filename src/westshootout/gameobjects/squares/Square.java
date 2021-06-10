@@ -1,7 +1,6 @@
-package gameobjects.squares;
+package westshootout.gameobjects.squares;
 
-import gameobjects.Board;
-import gameobjects.Player;
+import westshootout.gameobjects.Player;
 
 public abstract class Square {
 
@@ -44,4 +43,6 @@ public abstract class Square {
     public SquareType getSquareType() {
         return squareType;
     }
+
+    public abstract boolean effect(Player player);
 }

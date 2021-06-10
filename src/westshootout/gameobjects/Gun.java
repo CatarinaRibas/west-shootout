@@ -1,4 +1,4 @@
-package gameobjects;
+package westshootout.gameobjects;
 
 public class Gun {
 

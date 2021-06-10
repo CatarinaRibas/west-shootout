@@ -1,7 +1,7 @@
-package gameobjects;
+package westshootout.gameobjects;
 
-import gameobjects.squares.Square;
-import gameobjects.squares.SquareType;
+import westshootout.gameobjects.squares.Square;
+import westshootout.gameobjects.squares.SquareType;
 
 public class Board {
 
