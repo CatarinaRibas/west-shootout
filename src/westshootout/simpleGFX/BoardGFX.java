@@ -9,6 +9,7 @@ import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
 import org.academiadecodigo.simplegraphics.pictures.Picture;
 import westshootout.Game;
+import westshootout.Sound;
 import westshootout.gameobjects.Player;
 import westshootout.gameobjects.cards.TypeOfCards;
 import westshootout.gameobjects.squares.*;
@@ -51,6 +52,8 @@ public class BoardGFX implements KeyboardHandler {
     //change AskRoll to TEXT
     private Text askRollText;
     private Text movesLeftText;
+    private Picture backgroundText;
+
     private Text switchPlaces;
     private Text tokenText1;
     private Text tokenText2;
@@ -113,6 +116,14 @@ public class BoardGFX implements KeyboardHandler {
     private boolean targetBselected;
     private boolean targetCselected;
 
+    //SOUND
+
+    private Sound diceSound;
+    private Sound walkSound;
+    private Sound shotSound;
+    private Sound reloadSound;
+    private Sound killSound;
+
     //Constuction
     public BoardGFX(Game game) {
 
@@ -140,7 +151,7 @@ public class BoardGFX implements KeyboardHandler {
         portrait1 = new Rectangle(BOARD_X_MARGIN - 200, game.getBoard().BOARD_SIZE * SQUARE_SIZE, PORTRAIT_SIZE, PORTRAIT_SIZE);
         portrait1.setColor(Color.BLUE);
         character1Picture = new Picture(BOARD_X_MARGIN - 200, game.getBoard().BOARD_SIZE * SQUARE_SIZE + 6, "character1.png");
-        portrait1Picture = new Picture(BOARD_X_MARGIN - 200, game.getBoard().BOARD_SIZE * SQUARE_SIZE, "playerOne.png");
+        portrait1Picture = new Picture(BOARD_X_MARGIN - 300, game.getBoard().BOARD_SIZE * SQUARE_SIZE + 15, "playerOne.png");
         portrait1Picture.grow(10, 10);
         tokenText1 = new Text(BOARD_X_MARGIN - 270, game.getBoard().BOARD_SIZE * SQUARE_SIZE - 33, "Player 1");
         player1Token = new Picture(BOARD_X_MARGIN + ( SQUARE_SIZE), BOARD_Y_MARGIN + ( SQUARE_SIZE), "playerOne.png");
@@ -151,7 +162,7 @@ public class BoardGFX implements KeyboardHandler {
 
         portrait2 = new Rectangle(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, BOARD_Y_MARGIN + 100, PORTRAIT_SIZE, PORTRAIT_SIZE);
         portrait2.setColor(Color.RED);
-        character2Picture = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, BOARD_Y_MARGIN + 106, "character1.png");
+        character2Picture = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, BOARD_Y_MARGIN + 106, "character2.png");
         tokenText2 = new Text(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE + SQUARE_SIZE + 80, BOARD_Y_MARGIN + 68, "Player 2");
         player2Token = new Picture(BOARD_X_MARGIN + ( SQUARE_SIZE), BOARD_Y_MARGIN + ( SQUARE_SIZE), "playerTwo.png");
         player2Available = new Rectangle(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE + 100, BOARD_Y_MARGIN + 100, SQUARE_SIZE, SQUARE_SIZE);
@@ -163,7 +174,7 @@ public class BoardGFX implements KeyboardHandler {
         portrait3 = new Rectangle(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, game.getBoard().BOARD_SIZE * SQUARE_SIZE, PORTRAIT_SIZE, PORTRAIT_SIZE);
         portrait3.setColor(Color.YELLOW);
 
-        character3Picture = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, game.getBoard().BOARD_SIZE * SQUARE_SIZE + 6, "character1.png");
+        character3Picture = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, game.getBoard().BOARD_SIZE * SQUARE_SIZE + 6, "character3.png");
         tokenText3 = new Text(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE + PORTRAIT_SIZE + 50, game.getBoard().BOARD_SIZE * SQUARE_SIZE - 33, "Player 3");
         player3Token = new Picture(0, 0, "playerThree.png");
         player3Available = new Rectangle(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, game.getBoard().BOARD_SIZE * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
@@ -175,7 +186,7 @@ public class BoardGFX implements KeyboardHandler {
 
         portrait4 = new Rectangle(BOARD_X_MARGIN - 200, BOARD_Y_MARGIN + 100, PORTRAIT_SIZE, PORTRAIT_SIZE);
         portrait4.setColor(Color.GREEN);
-        character4Picture = new Picture(BOARD_X_MARGIN - 200, BOARD_Y_MARGIN + 106, "character1.png");
+        character4Picture = new Picture(BOARD_X_MARGIN - 200, BOARD_Y_MARGIN + 106, "character4.png");
         tokenText4 = new Text(BOARD_X_MARGIN - 270, game.getBoard().BOARD_SIZE * SQUARE_SIZE - 682, "Player 4");
         player4Token = new Picture(0, 0, "playerFourth.png");
         player4Available = new Rectangle(BOARD_X_MARGIN - 200, BOARD_Y_MARGIN + 100, SQUARE_SIZE, SQUARE_SIZE);
@@ -187,6 +198,13 @@ public class BoardGFX implements KeyboardHandler {
 
         bang = new Picture(BOARD_X_MARGIN + 150, BOARD_Y_MARGIN + 200, "Bang.png");
 
+        backgroundText = new Picture(BOARD_X_MARGIN + 325 - 100, BOARD_Y_MARGIN - 40 - 20,"backgroundMessage.png");
+
+        diceSound = new Sound("/DiceRoll.wav");
+        walkSound = new Sound("/Walk.wav");
+        shotSound = new Sound ("/Shot.wav");
+        reloadSound = new Sound("/Reload.wav");
+        killSound = new Sound("/Mataram-me.wav");
     }
 
     //Related with Board
@@ -212,16 +230,16 @@ public class BoardGFX implements KeyboardHandler {
                             gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "death square.png");
                             break;
                         case SLIDE_EAST:
-                            gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "whiteSquare.png");
+                            gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "slideWEST.png");
                             break;
                         case SLIDE_SOUTH:
-                            gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "whiteSquare.png");
+                            gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "slideSOUTH.png");
                             break;
                         case SLIDE_WEST:
-                            gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "whiteSquare.png");
+                            gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "slideEAST.png");
                             break;
                         case SLIDE_NORTH:
-                            gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "whiteSquare.png");
+                            gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "slideNORTH.png");
                             break;
                         case BATTLE_CYAN:
                             gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "square 3 (1).png");
@@ -266,6 +284,8 @@ public class BoardGFX implements KeyboardHandler {
     //Related with Dice
     public void setDice(int result) {
 
+        dice.delete();
+
         switch (result) {
             case 1:
                 dice = new Picture(PADDING + 150, 400, "Dice1.png");
@@ -298,6 +318,8 @@ public class BoardGFX implements KeyboardHandler {
     }
 
     public void askRoll() {
+
+        backgroundText.draw();
 
         askRollText = new Text(BOARD_X_MARGIN + 325, BOARD_Y_MARGIN - 40, "Player " + activePlayer.getPlayerNumber() + " , please Roll the dice");
         askRollText.grow(15, 20);
@@ -343,7 +365,7 @@ public class BoardGFX implements KeyboardHandler {
                     tokenText1.draw();
                     character1Picture.draw();
                     portrait1Picture.draw();
-                    deathSquare.draw();
+                    //deathSquare.draw();
                     break;
                 case 1:
                     portrait2.fill();
@@ -669,7 +691,9 @@ public class BoardGFX implements KeyboardHandler {
 
     public void setMovesLeft(int movesLeft) {
 
-        movesLeftText = new Text(BOARD_X_MARGIN + 325, BOARD_Y_MARGIN - 40, "Player " + activePlayer.getPlayerNumber() + " , you have " + movesLeft + "moves available");
+        backgroundText.draw();
+
+        movesLeftText = new Text(BOARD_X_MARGIN + 325, BOARD_Y_MARGIN - 40, "Player " + activePlayer.getPlayerNumber() + " , you have " + movesLeft + " moves available");
         movesLeftText.grow(15, 20);
 
         switch (activePlayer.getPlayerNumber()) {
@@ -828,6 +852,7 @@ public class BoardGFX implements KeyboardHandler {
         switch (keyboardEvent.getKey()) {
             case KeyboardEvent.KEY_SPACE:
                 if (rolled) {
+                    diceSound.play(true);
                     activePlayer.setHasRolled(true);
                     rolled = false;
                     hideAskRoll();
@@ -835,6 +860,8 @@ public class BoardGFX implements KeyboardHandler {
                 break;
             case KeyboardEvent.KEY_S:
                 if (moveShooted) {
+                    shotSound.play(true);
+                    killSound.play(true);
                     System.out.println("Shoot that guy");
                     System.out.println(activePlayer);
                     activePlayer.setWillShoot(true);
@@ -844,6 +871,7 @@ public class BoardGFX implements KeyboardHandler {
                 break;
             case KeyboardEvent.KEY_R:
                 if (moveReloaded) {
+                    reloadSound.play(true);
                     System.out.println("reloading");
                     activePlayer.setWillReload(true);
                     moveReloaded = false;
@@ -859,6 +887,7 @@ public class BoardGFX implements KeyboardHandler {
                 }
             case KeyboardEvent.KEY_1:
                 if (moved) {
+                    walkSound.play(true);
                     activePlayer.setHasMovedToA(true);
                     moved = false;
                 }
@@ -866,6 +895,7 @@ public class BoardGFX implements KeyboardHandler {
 
             case KeyboardEvent.KEY_2:
                 if (moved) {
+                    walkSound.play(true);
                     activePlayer.setHasMovedToB(true);
                     moved = false;
                 }

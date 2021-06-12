@@ -32,12 +32,19 @@ public class Game {
 
     private GameOverGFX gameOverGFX;
 
+    //SOUND
+
+    private Sound menuSound;
+    private Sound gameSound;
+
     public Game() {
 
         this.board = ObjectFactory.createBoard();
         this.dice = ObjectFactory.createDice();
         this.boardGFX = new BoardGFX(this);
         this.gameOverGFX = new GameOverGFX();
+        this.menuSound = new Sound("/Menu.wav");
+        this.gameSound = new Sound("/Theme.wav");
         this.isWon = false;
 
     }
@@ -84,6 +91,9 @@ public class Game {
 
     public boolean mainMenu() {
 
+        menuSound.setLoop(10);
+        menuSound.play(true);
+
         MainMenuGFX mainMenu = new MainMenuGFX(this);
         System.out.println("Showing main menu");
         mainMenu.show();
@@ -93,6 +103,10 @@ public class Game {
     }
 
     public boolean play() {
+
+        menuSound.stop();
+        gameSound.setLoop(99);
+        gameSound.play(true);
 
         while (!isWon()) {
 
