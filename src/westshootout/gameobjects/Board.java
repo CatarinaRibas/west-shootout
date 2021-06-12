@@ -29,107 +29,106 @@ public class Board {
         // Outer Board Ring
 
         //// West Corridor
-        grid[0][0] = ObjectFactory.createSquare(0, 0, SquareType.BONUS);
-        grid[0][1] = ObjectFactory.createSquare(0, 1, SquareType.BATTLE_CYAN);
-        grid[0][2] = ObjectFactory.createSquare(0, 2, SquareType.BATTLE_GREEN);
-        grid[0][3] = ObjectFactory.createSquare(0, 3, SquareType.BATTLE_ORANGE);
-        grid[0][4] = ObjectFactory.createSquare(0, 4, SquareType.BATTLE_CYAN);
-        grid[0][5] = ObjectFactory.createSquare(0, 5, SquareType.COVER);
-        grid[0][6] = ObjectFactory.createSquare(0, 6, SquareType.BATTLE_GREEN);
-        grid[0][7] = ObjectFactory.createSquare(0, 7, SquareType.BATTLE_ORANGE);
-        grid[0][8] = ObjectFactory.createSquare(0, 8, SquareType.BATTLE_CYAN);
-        grid[0][9] = ObjectFactory.createSquare(0, 9, SquareType.BATTLE_GREEN);
-        grid[0][10] = ObjectFactory.createSquare(0, 10, SquareType.BONUS);
+        grid[0][0] = ObjectFactory.createSquare(0, 0, SquareType.BONUS,this);
+        grid[0][1] = ObjectFactory.createSquare(0, 1, SquareType.BATTLE_CYAN,this);
+        grid[0][2] = ObjectFactory.createSquare(0, 2, SquareType.BATTLE_GREEN,this);
+        grid[0][3] = ObjectFactory.createSquare(0, 3, SquareType.BATTLE_ORANGE,this);
+        grid[0][4] = ObjectFactory.createSquare(0, 4, SquareType.BATTLE_CYAN,this);
+        grid[0][5] = ObjectFactory.createSquare(0, 5, SquareType.COVER,this);
+        grid[0][6] = ObjectFactory.createSquare(0, 6, SquareType.BATTLE_GREEN,this);
+        grid[0][7] = ObjectFactory.createSquare(0, 7, SquareType.BATTLE_ORANGE,this);
+        grid[0][8] = ObjectFactory.createSquare(0, 8, SquareType.BATTLE_CYAN,this);
+        grid[0][9] = ObjectFactory.createSquare(0, 9, SquareType.BATTLE_GREEN,this);
+        grid[0][10] = ObjectFactory.createSquare(0, 10, SquareType.BONUS,this);
 
         //// South Corridor
-        grid[1][10] = ObjectFactory.createSquare(1, 10, SquareType.BATTLE_ORANGE);
-        grid[2][10] = ObjectFactory.createSquare(2, 10, SquareType.BATTLE_CYAN);
-        grid[3][10] = ObjectFactory.createSquare(3, 10, SquareType.BATTLE_GREEN);
-        grid[4][10] = ObjectFactory.createSquare(4, 10, SquareType.BATTLE_ORANGE);
-        grid[5][10] = ObjectFactory.createSquare(5, 10, SquareType.COVER);
-        grid[6][10] = ObjectFactory.createSquare(6, 10, SquareType.BATTLE_CYAN);
-        grid[7][10] = ObjectFactory.createSquare(7, 10, SquareType.BATTLE_GREEN);
-        grid[8][10] = ObjectFactory.createSquare(8, 10, SquareType.BATTLE_ORANGE);
-        grid[9][10] = ObjectFactory.createSquare(9, 10, SquareType.BATTLE_CYAN);
-        grid[10][10] = ObjectFactory.createSquare(10, 10, SquareType.BONUS);
+        grid[1][10] = ObjectFactory.createSquare(1, 10, SquareType.BATTLE_ORANGE,this);
+        grid[2][10] = ObjectFactory.createSquare(2, 10, SquareType.BATTLE_CYAN,this);
+        grid[3][10] = ObjectFactory.createSquare(3, 10, SquareType.BATTLE_GREEN,this);
+        grid[4][10] = ObjectFactory.createSquare(4, 10, SquareType.BATTLE_ORANGE,this);
+        grid[5][10] = ObjectFactory.createSquare(5, 10, SquareType.COVER,this);
+        grid[6][10] = ObjectFactory.createSquare(6, 10, SquareType.BATTLE_CYAN,this);
+        grid[7][10] = ObjectFactory.createSquare(7, 10, SquareType.BATTLE_GREEN,this);
+        grid[8][10] = ObjectFactory.createSquare(8, 10, SquareType.BATTLE_ORANGE,this);
+        grid[9][10] = ObjectFactory.createSquare(9, 10, SquareType.BATTLE_CYAN,this);
+        grid[10][10] = ObjectFactory.createSquare(10, 10, SquareType.BONUS,this);
 
         //// East Corridor
-        grid[10][9] = ObjectFactory.createSquare(10, 9, SquareType.BATTLE_GREEN);
-        grid[10][8] = ObjectFactory.createSquare(10, 8, SquareType.BATTLE_ORANGE);
-        grid[10][7] = ObjectFactory.createSquare(10, 7, SquareType.BATTLE_CYAN);
-        grid[10][6] = ObjectFactory.createSquare(10, 6, SquareType.BATTLE_GREEN);
-        grid[10][5] = ObjectFactory.createSquare(10, 5, SquareType.COVER);
-        grid[10][4] = ObjectFactory.createSquare(10, 4, SquareType.BATTLE_ORANGE);
-        grid[10][3] = ObjectFactory.createSquare(10, 3, SquareType.BATTLE_CYAN);
-        grid[10][2] = ObjectFactory.createSquare(10, 2, SquareType.BATTLE_GREEN);
-        grid[10][1] = ObjectFactory.createSquare(10, 1, SquareType.BATTLE_ORANGE);
-        grid[10][0] = ObjectFactory.createSquare(10, 0, SquareType.BONUS);
+        grid[10][9] = ObjectFactory.createSquare(10, 9, SquareType.BATTLE_GREEN,this);
+        grid[10][8] = ObjectFactory.createSquare(10, 8, SquareType.BATTLE_ORANGE,this);
+        grid[10][7] = ObjectFactory.createSquare(10, 7, SquareType.BATTLE_CYAN,this);
+        grid[10][6] = ObjectFactory.createSquare(10, 6, SquareType.BATTLE_GREEN,this);
+        grid[10][5] = ObjectFactory.createSquare(10, 5, SquareType.COVER,this);
+        grid[10][4] = ObjectFactory.createSquare(10, 4, SquareType.BATTLE_ORANGE,this);
+        grid[10][3] = ObjectFactory.createSquare(10, 3, SquareType.BATTLE_CYAN,this);
+        grid[10][2] = ObjectFactory.createSquare(10, 2, SquareType.BATTLE_GREEN,this);
+        grid[10][1] = ObjectFactory.createSquare(10, 1, SquareType.BATTLE_ORANGE,this);
+        grid[10][0] = ObjectFactory.createSquare(10, 0, SquareType.BONUS,this);
 
         //// North Corridor
-        grid[9][0] = ObjectFactory.createSquare(9, 0, SquareType.BATTLE_CYAN);
-        grid[8][0] = ObjectFactory.createSquare(8, 0, SquareType.BATTLE_GREEN);
-        grid[7][0] = ObjectFactory.createSquare(7, 0, SquareType.BATTLE_ORANGE);
-        grid[6][0] = ObjectFactory.createSquare(6, 0, SquareType.BATTLE_CYAN);
-        grid[5][0] = ObjectFactory.createSquare(5, 0, SquareType.COVER);
-        grid[4][0] = ObjectFactory.createSquare(4, 0, SquareType.BATTLE_GREEN);
-        grid[3][0] = ObjectFactory.createSquare(3, 0, SquareType.BATTLE_ORANGE);
-        grid[2][0] = ObjectFactory.createSquare(2, 0, SquareType.BATTLE_CYAN);
-        grid[1][0] = ObjectFactory.createSquare(1, 0, SquareType.BATTLE_GREEN);
+        grid[9][0] = ObjectFactory.createSquare(9, 0, SquareType.BATTLE_CYAN,this);
+        grid[8][0] = ObjectFactory.createSquare(8, 0, SquareType.BATTLE_GREEN,this);
+        grid[7][0] = ObjectFactory.createSquare(7, 0, SquareType.BATTLE_ORANGE,this);
+        grid[6][0] = ObjectFactory.createSquare(6, 0, SquareType.BATTLE_CYAN,this);
+        grid[5][0] = ObjectFactory.createSquare(5, 0, SquareType.COVER,this);
+        grid[4][0] = ObjectFactory.createSquare(4, 0, SquareType.BATTLE_GREEN,this);
+        grid[3][0] = ObjectFactory.createSquare(3, 0, SquareType.BATTLE_ORANGE,this);
+        grid[2][0] = ObjectFactory.createSquare(2, 0, SquareType.BATTLE_CYAN,this);
+        grid[1][0] = ObjectFactory.createSquare(1, 0, SquareType.BATTLE_GREEN,this);
 
 
         // Side paths
         //// NW path
-        grid[1][3] = ObjectFactory.createSquare(1, 3, SquareType.BAD_LUCK);
-        grid[2][3] = ObjectFactory.createSquare(2, 3, SquareType.BONUS);
-        grid[2][2] = ObjectFactory.createSquare(2, 2, SquareType.BATTLE_ORANGE);
-        grid[3][2] = ObjectFactory.createSquare(3, 2, SquareType.BONUS);
-        grid[3][1] = ObjectFactory.createSquare(3, 1, SquareType.BAD_LUCK);
+        grid[1][3] = ObjectFactory.createSquare(1, 3, SquareType.BAD_LUCK,this);
+        grid[2][3] = ObjectFactory.createSquare(2, 3, SquareType.BONUS,this);
+        grid[2][2] = ObjectFactory.createSquare(2, 2, SquareType.BATTLE_ORANGE,this);
+        grid[3][2] = ObjectFactory.createSquare(3, 2, SquareType.BONUS,this);
+        grid[3][1] = ObjectFactory.createSquare(3, 1, SquareType.BAD_LUCK,this);
 
         //// SW path
-        grid[1][7] = ObjectFactory.createSquare(1, 7, SquareType.BAD_LUCK);
-        grid[2][7] = ObjectFactory.createSquare(2, 7, SquareType.BONUS);
-        grid[2][8] = ObjectFactory.createSquare(2, 8, SquareType.BATTLE_GREEN);
-        grid[3][8] = ObjectFactory.createSquare(3, 8, SquareType.BONUS);
-        grid[3][9] = ObjectFactory.createSquare(3, 9, SquareType.BAD_LUCK);
+        grid[1][7] = ObjectFactory.createSquare(1, 7, SquareType.BAD_LUCK,this);
+        grid[2][7] = ObjectFactory.createSquare(2, 7, SquareType.BONUS,this);
+        grid[2][8] = ObjectFactory.createSquare(2, 8, SquareType.BATTLE_GREEN,this);
+        grid[3][8] = ObjectFactory.createSquare(3, 8, SquareType.BONUS,this);
+        grid[3][9] = ObjectFactory.createSquare(3, 9, SquareType.BAD_LUCK,this);
 
         //// SE path
-        grid[7][9] = ObjectFactory.createSquare(7, 9, SquareType.BAD_LUCK);
-        grid[7][8] = ObjectFactory.createSquare(7, 8, SquareType.BONUS);
-        grid[8][8] = ObjectFactory.createSquare(8, 8, SquareType.BATTLE_ORANGE);
-        grid[8][7] = ObjectFactory.createSquare(8, 7, SquareType.BONUS);
-        grid[9][7] = ObjectFactory.createSquare(9, 7, SquareType.BAD_LUCK);
+        grid[7][9] = ObjectFactory.createSquare(7, 9, SquareType.BAD_LUCK,this);
+        grid[7][8] = ObjectFactory.createSquare(7, 8, SquareType.BONUS,this);
+        grid[8][8] = ObjectFactory.createSquare(8, 8, SquareType.BATTLE_ORANGE,this);
+        grid[8][7] = ObjectFactory.createSquare(8, 7, SquareType.BONUS,this);
+        grid[9][7] = ObjectFactory.createSquare(9, 7, SquareType.BAD_LUCK,this);
 
         //// NE path
-        grid[7][1] = ObjectFactory.createSquare(7, 1, SquareType.BAD_LUCK);
-        grid[7][2] = ObjectFactory.createSquare(7, 2, SquareType.BONUS);
-        grid[8][2] = ObjectFactory.createSquare(8, 2, SquareType.BATTLE_CYAN);
-        grid[8][3] = ObjectFactory.createSquare(8, 3, SquareType.BONUS);
-        grid[9][3] = ObjectFactory.createSquare(9, 3, SquareType.BAD_LUCK);
+        grid[7][1] = ObjectFactory.createSquare(7, 1, SquareType.BAD_LUCK,this);
+        grid[7][2] = ObjectFactory.createSquare(7, 2, SquareType.BONUS,this);
+        grid[8][2] = ObjectFactory.createSquare(8, 2, SquareType.BATTLE_CYAN,this);
+        grid[8][3] = ObjectFactory.createSquare(8, 3, SquareType.BONUS,this);
+        grid[9][3] = ObjectFactory.createSquare(9, 3, SquareType.BAD_LUCK,this);
 
 
         // Canyons
         //// West-to-North
-        grid[1][5] = ObjectFactory.createSquare(1, 5, SquareType.SLIDE_EAST);
-        grid[2][5] = ObjectFactory.createSquare(2, 5, SquareType.SLIDE_EAST);
-        grid[3][5] = ObjectFactory.createSquare(3, 5, SquareType.BONUS);
-        grid[4][5] = ObjectFactory.createSquare(4, 5, SquareType.DEATH);
-        grid[4][4] = ObjectFactory.createSquare(4, 4, SquareType.BONUS);
-        grid[5][4] = ObjectFactory.createSquare(5, 4, SquareType.DEATH);
-        grid[5][3] = ObjectFactory.createSquare(5, 3, SquareType.BONUS);
-        grid[5][2] = ObjectFactory.createSquare(5, 2, SquareType.SLIDE_SOUTH);
-        grid[5][1] = ObjectFactory.createSquare(5, 1, SquareType.SLIDE_SOUTH);
+        grid[1][5] = ObjectFactory.createSquare(1, 5, SquareType.SLIDE_EAST,this);
+        grid[2][5] = ObjectFactory.createSquare(2, 5, SquareType.SLIDE_EAST,this);
+        grid[3][5] = ObjectFactory.createSquare(3, 5, SquareType.BONUS,this);
+        grid[4][5] = ObjectFactory.createSquare(4, 5, SquareType.DEATH,this);
+        grid[4][4] = ObjectFactory.createSquare(4, 4, SquareType.BONUS,this);
+        grid[5][4] = ObjectFactory.createSquare(5, 4, SquareType.DEATH,this);
+        grid[5][3] = ObjectFactory.createSquare(5, 3, SquareType.BONUS,this);
+        grid[5][2] = ObjectFactory.createSquare(5, 2, SquareType.SLIDE_SOUTH,this);
+        grid[5][1] = ObjectFactory.createSquare(5, 1, SquareType.SLIDE_SOUTH,this);
 
         //// East-to-South
-        grid[9][5] = ObjectFactory.createSquare(9, 5, SquareType.SLIDE_WEST);
-        grid[8][5] = ObjectFactory.createSquare(8, 5, SquareType.SLIDE_WEST);
-        grid[7][5] = ObjectFactory.createSquare(7, 5, SquareType.BONUS);
-        grid[6][5] = ObjectFactory.createSquare(6, 5, SquareType.DEATH);
-        grid[6][6] = ObjectFactory.createSquare(6, 6, SquareType.BONUS);
-        grid[5][6] = ObjectFactory.createSquare(5, 6, SquareType.DEATH);
-        grid[5][7] = ObjectFactory.createSquare(5, 7, SquareType.BONUS);
-        grid[5][8] = ObjectFactory.createSquare(5, 8, SquareType.SLIDE_NORTH);
-        grid[5][9] = ObjectFactory.createSquare(5, 9, SquareType.SLIDE_NORTH);
-
+        grid[9][5] = ObjectFactory.createSquare(9, 5, SquareType.SLIDE_WEST,this);
+        grid[8][5] = ObjectFactory.createSquare(8, 5, SquareType.SLIDE_WEST,this);
+        grid[7][5] = ObjectFactory.createSquare(7, 5, SquareType.BONUS,this);
+        grid[6][5] = ObjectFactory.createSquare(6, 5, SquareType.DEATH,this);
+        grid[6][6] = ObjectFactory.createSquare(6, 6, SquareType.BONUS,this);
+        grid[5][6] = ObjectFactory.createSquare(5, 6, SquareType.DEATH,this);
+        grid[5][7] = ObjectFactory.createSquare(5, 7, SquareType.BONUS,this);
+        grid[5][8] = ObjectFactory.createSquare(5, 8, SquareType.SLIDE_NORTH,this);
+        grid[5][9] = ObjectFactory.createSquare(5, 9, SquareType.SLIDE_NORTH,this);
     }
 
     // Sets each previously populated Square's next connection to the appropriate following square by design.

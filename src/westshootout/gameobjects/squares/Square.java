@@ -1,5 +1,6 @@
 package westshootout.gameobjects.squares;
 
+import westshootout.Game;
 import westshootout.gameobjects.Player;
 
 public abstract class Square {

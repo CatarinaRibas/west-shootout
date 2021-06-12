@@ -2,7 +2,6 @@ package westshootout.gameobjects;
 
 public class Dice {
 
-
     private int result;
 
     public int roll() {
@@ -13,4 +12,5 @@ public class Dice {
     public int getResult() {
         return result;
     }
+
 }

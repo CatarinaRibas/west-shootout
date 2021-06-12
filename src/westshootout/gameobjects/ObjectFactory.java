@@ -1,5 +1,6 @@
 package westshootout.gameobjects;
 
+import westshootout.gameobjects.cards.Card;
 import westshootout.gameobjects.squares.*;
 import westshootout.*;
 
@@ -10,7 +11,7 @@ public class ObjectFactory {
         return new Board();
     }
 
-    public static Square createSquare(int xPos, int yPos, SquareType type) {
+    public static Square createSquare(int xPos, int yPos, SquareType type, Board board) {
 
         switch (type) {
             case BAD_LUCK:
@@ -22,13 +23,13 @@ public class ObjectFactory {
             case DEATH:
                 return new DeathSquare(xPos, yPos);
             case SLIDE_EAST:
-                return new SlideSquare(xPos, yPos, type);
+                return new SlideSquare(xPos, yPos, type, board);
             case SLIDE_SOUTH:
-                return new SlideSquare(xPos, yPos, type);
+                return new SlideSquare(xPos, yPos, type, board);
             case SLIDE_WEST:
-                return new SlideSquare(xPos, yPos, type);
+                return new SlideSquare(xPos, yPos, type, board);
             case SLIDE_NORTH:
-                return new SlideSquare(xPos, yPos, type);
+                return new SlideSquare(xPos, yPos, type, board);
             case BATTLE_CYAN:
                 return new BattleSquare(xPos, yPos, type);
             case BATTLE_GREEN:
@@ -51,5 +52,4 @@ public class ObjectFactory {
     public static Player createPlayer(int playerNum, Game game) {
         return new Player(playerNum, game);
     }
-
 }

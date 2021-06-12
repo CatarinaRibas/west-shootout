@@ -26,6 +26,7 @@ public class Player {
     private boolean isDead;
     // Used to display winner at game finish.
     private boolean isWinner;
+    private boolean isSkipped;
     private boolean canShoot;
     private boolean canReload;
     private boolean willShoot;
@@ -67,12 +68,14 @@ public class Player {
         this.willShoot = false;
         this.willMove = false;
         this.willReload = false;
-        this.canReload = false;
 
         if (!gun.bulletsLeft()) {
             this.canShoot = false;
             this.canReload = true;
         }
+
+        System.out.println(canShoot);
+        System.out.println(canReload);
 
         if (canShoot) {
 
@@ -116,6 +119,7 @@ public class Player {
             }
         }
 
+        System.out.println("Preparing move");
         prepareMove();
         return;
     }
@@ -172,8 +176,11 @@ public class Player {
 
         this.targetA = false;
         this.targetB = false;
+        Player[] targets = new Player[2];
+        targets[0] = targetA;
+        targets[1] = targetB;
 
-        game.getBoardGFX().showTargets();
+        game.getBoardGFX().showTargets(targets);
 
         while (!this.targetA || !this.targetB) {
         }
@@ -194,8 +201,12 @@ public class Player {
         this.targetA = false;
         this.targetB = false;
         this.targetC = false;
+        Player[] targets = new Player[3];
+        targets[0] = targetA;
+        targets[1] = targetB;
+        targets[2] = targetC;
 
-        game.getBoardGFX().showTargets();
+        game.getBoardGFX().showTargets(targets);
 
         while (!this.targetA || !this.targetB || !this.targetC) {
         }
@@ -301,14 +312,21 @@ public class Player {
     public boolean prepareMove() {
 
         this.hasRolled = false;
+        game.getBoardGFX().askRoll();
+        System.out.println(hasRolled);
 
         while (!this.hasRolled) {
+
+            System.out.println(hasRolled);
+
         }
+        System.out.println(hasRolled);
 
         setMovesLeft(game.getDice().roll());
+        System.out.println(movesLeft);
         this.game.getBoardGFX().setDice(game.getDice().getResult());
+        System.out.println("Going to move");
         move();
-
         return true;
 
     }
@@ -321,10 +339,16 @@ public class Player {
             hasMovedToB = false;
 
             this.game.getBoardGFX().setMovesLeft(this.movesLeft);
+            System.out.println("Moves left set");
+            System.out.println(movesLeft);
 
-            while (!hasMovedToA || !hasMovedToB) {
+            while (!hasMovedToA && !hasMovedToB) {
+                System.out.println(hasMovedToA);
+                System.out.println("looping");
             }
+            System.out.println("Left loop");
             if (hasMovedToA) {
+                System.out.println("Going to A");
                 currentSquare = currentSquare.getNextSquareA();
             }
             if (hasMovedToB && currentSquare.getNextSquareB() != null) {
@@ -335,7 +359,8 @@ public class Player {
             }
 
             movesLeft--;
-            game.getBoardGFX().updatePositions();
+            game.getBoardGFX().hideMovesLeft();
+            game.getBoardGFX().updatePositions(this);
         }
 
         currentSquare.effect(this);
@@ -346,7 +371,7 @@ public class Player {
     public boolean move(Square square) {
 
         this.currentSquare = square;
-        game.getBoardGFX().updatePositions();
+        game.getBoardGFX().updatePositions(this);
         return true;
 
     }
@@ -373,8 +398,28 @@ public class Player {
         return isDead;
     }
 
+    public boolean isSkipped() {
+        return isSkipped;
+    }
+
     public Square getCurrentSquare() {
         return currentSquare;
+    }
+
+    public Gun getGun() {
+        return gun;
+    }
+
+    public int getCurrentLives() {
+        return currentLives;
+    }
+
+    public int getMaxLives() {
+        return maxLives;
+    }
+
+    public Game getGame() {
+        return game;
     }
 
     //Setters
@@ -394,6 +439,14 @@ public class Player {
         this.currentLives = currentLives;
     }
 
+    public void setMaxLives(int maxLives) {
+        this.maxLives = maxLives;
+    }
+
+    public void setSkipped(boolean skipped) {
+        isSkipped = skipped;
+    }
+
     public void setWillMove(boolean willMove) {
         this.willMove = willMove;
     }
@@ -402,12 +455,17 @@ public class Player {
         this.willShoot = willShoot;
     }
 
+    public void setWillReload(boolean willReload) {
+        this.willReload = willReload;
+    }
+
     public void setHasRolled(boolean hasRolled) {
         this.hasRolled = hasRolled;
     }
 
     public void setHasMovedToA(boolean hasMovedToA) {
         this.hasMovedToA = hasMovedToA;
+        System.out.println(hasMovedToA);
     }
 
     public void setHasMovedToB(boolean hasMovedToB) {
