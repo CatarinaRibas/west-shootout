@@ -10,8 +10,6 @@ public class CoverSquare extends Square{
 
     public boolean effect(Player player) {
 
-        player.setCanShoot(false);
-        player.setCanReload(true);
         return true;
 
     }

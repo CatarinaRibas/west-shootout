@@ -14,7 +14,7 @@ public class BadLuckSquare extends Square{
 
     public boolean effect(Player player) {
 
-        TypeOfCards badCard = TypeOfCards.values()[TypeOfCards.values().length - ((int) (Math.ceil(Math.random() * 4) - 1))];
+        TypeOfCards badCard = TypeOfCards.values()[TypeOfCards.values().length - ((int) (Math.ceil(Math.random() * 4) - 1) - 1)];
         player.getGame().getBoardGFX().showCard(badCard);
         Card.cardEffect(badCard, player);
         return true;

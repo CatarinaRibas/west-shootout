@@ -23,34 +23,28 @@ public class GameOverGFX implements KeyboardHandler {
     private int picturePositionY = 600;
     private MainMenuGFX mainMenuGFX;
 
-    private Picture player1Won = new Picture(picturePositionX, picturePositionY, "playersNumber1.png");
-    private Picture player2Won = new Picture(picturePositionX, picturePositionY, "playersNumber 2.png");
-    private Picture player3Won = new Picture(picturePositionX, picturePositionY, "playersNumber 3.png");
-    private Picture player4Won = new Picture(picturePositionX, picturePositionY, "playersNumber 4.png");
-    private Picture backGround = new Picture(PADDING, PADDING, "finished.png");
+    private Picture player1Won = new Picture(picturePositionX, picturePositionY, "player1won.png");
+    private Picture player2Won = new Picture(picturePositionX, picturePositionY, "player2won.png");
+    private Picture player3Won = new Picture(picturePositionX, picturePositionY, "player3won.png");
+    private Picture player4Won = new Picture(picturePositionX, picturePositionY, "player4won.png");
 
 
     public void setWinner(int playerNumber) {
 
         switch (playerNumber) {
             case 1:
-                backGround.draw();
                 player1Won.draw();
                 break;
             case 2:
-                backGround.draw();
                 player2Won.draw();
                 break;
             case 3:
-                backGround.draw();
                 player3Won.draw();
                 break;
             case 4:
-                backGround.draw();
                 player4Won.draw();
                 break;
             default:
-                backGround.draw();
                 player1Won.draw();
                 break;
         }

@@ -51,10 +51,10 @@ public class MainMenuGFX implements KeyboardHandler {
         this.arrowPosition = ARROWPOSITION1;
         this.arrow = new Picture(ARROWPADDING, ARROWPOSITION1, "arrow.png");
         this.instructions = new Picture(PADDING, PADDING, "instructions.png");
-        this.menu = new Picture(PADDING, PADDING, "menu2.png");
-        this.playersNumber = new Picture(PADDING, PADDING, "playersNumber2.png");
-        this.boardGame = new Picture(PADDING, PADDING, "boardGame.png");
-        this.finished = new Picture(PADDING, PADDING, "finished.png");
+        this.menu = new Picture(PADDING, PADDING, "menu.png");
+        this.playersNumber = new Picture(PADDING, PADDING, "playersNumber.png");
+        //this.boardGame = new Picture(PADDING, PADDING, "boardGame.png");
+        //this.finished = new Picture(PADDING, PADDING, "finished.png");
         keyboardInit();
 
     }
@@ -71,7 +71,7 @@ public class MainMenuGFX implements KeyboardHandler {
         this.rectangle3.delete();
         this.rectangle4.delete();
         this.arrow.delete();
-        this.boardGame.delete();
+        //this.boardGame.delete();
         this.playersNumber.delete();
         this.instructions.delete();
         this.menu.draw();

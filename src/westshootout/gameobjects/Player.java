@@ -2,6 +2,7 @@ package westshootout.gameobjects;
 
 import westshootout.gameobjects.squares.Square;
 import westshootout.Game;
+import westshootout.gameobjects.squares.SquareType;
 
 public class Player {
 
@@ -68,6 +69,11 @@ public class Player {
         this.willShoot = false;
         this.willMove = false;
         this.willReload = false;
+        this.canReload = false;
+
+        if (currentSquare.getSquareType().equals(SquareType.COVER)) {
+            this.canReload = true;
+        }
 
         if (!gun.bulletsLeft()) {
             this.canShoot = false;
@@ -80,18 +86,21 @@ public class Player {
         if (canShoot) {
 
             this.game.getBoardGFX().showMoveShoot();
+            System.out.println(this);
 
-            while (!this.willShoot || !this.willMove) {
+            while (!this.willShoot && !this.willMove) {
+                System.out.println("This");
             }
 
             if (this.willMove) {
-
+                System.out.println("Moving (shoot branch)");
                 prepareMove();
                 return;
             }
 
             if (this.willShoot) {
 
+                System.out.println("Shoot branch");
                 chooseTarget();
                 return;
 
@@ -100,19 +109,21 @@ public class Player {
 
         if (canReload) {
 
+            System.out.println("Entering reload branch");
             this.game.getBoardGFX().showMoveReload();
 
-            while (!this.willMove || !this.willReload) {
+            while (!this.willMove && !this.willReload) {
+                System.out.println("That");
             }
 
             if (this.willMove) {
-
+                System.out.println("Prepare move");
                 prepareMove();
                 return;
             }
 
             if (this.willReload) {
-
+                System.out.println("reloading...");
                 gun.reload();
                 game.getBoardGFX().updateBullets();
                 return;
@@ -128,44 +139,48 @@ public class Player {
 
         Player[] availableTargets = availableTargets();
 
-        if (availableTargets[0].equals(null) && availableTargets[1].equals(null) && availableTargets[2].equals(null)) {
+        if (availableTargets[0] == null && availableTargets[1] == null && availableTargets[2] == null) {
+            System.out.println("Zero targets, shooting the sky");
             gun.setRemainingBullets(gun.getRemainingBullets() - 1);
             game.getBoardGFX().updateBullets();
             game.getBoardGFX().showBang();
             return true;
         }
 
-        if (!availableTargets[0].equals(null) && availableTargets[1].equals(null) && availableTargets[2].equals(null)) {
+        if (!(availableTargets[0] == null) && availableTargets[1] == null && availableTargets[2] == null) {
+            System.out.println("Shooting the only guy available");
             fireAt(availableTargets[0]);
             return true;
         }
 
-        if (availableTargets[0].equals(null) && !availableTargets[1].equals(null) && availableTargets[2].equals(null)) {
+        System.out.println("shooting nobody");
+
+        if (availableTargets[0] == null && !(availableTargets[1] == null) && availableTargets[2] == null) {
             fireAt(availableTargets[1]);
             return true;
         }
 
-        if (availableTargets[0].equals(null) && availableTargets[1].equals(null) && !availableTargets[2].equals(null)) {
+        if (availableTargets[0] == null && availableTargets[1] == null && !(availableTargets[2] == null)) {
             fireAt(availableTargets[2]);
             return true;
         }
 
-        if (!availableTargets[0].equals(null) && !availableTargets[1].equals(null) && availableTargets[2].equals(null)) {
+        if (!(availableTargets[0] == null) && !(availableTargets[1] == null) && availableTargets[2] == null) {
             chooseFromTwo(availableTargets[0], availableTargets[1]);
             return true;
         }
 
-        if (availableTargets[0].equals(null) && !availableTargets[1].equals(null) && !availableTargets[2].equals(null)) {
+        if (availableTargets[0] == null && !(availableTargets[1] == null) && !(availableTargets[2] == null)) {
             chooseFromTwo(availableTargets[1], availableTargets[2]);
             return true;
         }
 
-        if (!availableTargets[0].equals(null) && availableTargets[1].equals(null) && !availableTargets[2].equals(null)) {
+        if (!(availableTargets[0] == null) && availableTargets[1] == null && !(availableTargets[2] == null)) {
             chooseFromTwo(availableTargets[0], availableTargets[2]);
             return true;
         }
 
-        if (!availableTargets[0].equals(null) && !availableTargets[1].equals(null) && !availableTargets[2].equals(null)) {
+        if (!(availableTargets[0] == null) && !(availableTargets[1] == null) && !(availableTargets[2] == null)) {
             chooseFromThree(availableTargets[0], availableTargets[1], availableTargets[2]);
             return true;
         }
@@ -284,8 +299,9 @@ public class Player {
     public boolean fireAt(Player player) {
 
         game.getBoardGFX().showBang();
+        gun.shoot(player);
         game.getBoardGFX().updateBullets();
-        return gun.shoot(player);
+        return true;
 
     }
 
@@ -294,7 +310,7 @@ public class Player {
     public void getShot() {
 
         currentLives--;
-        game.getBoardGFX().updateLives();
+        game.getBoardGFX().updateLives(this);
         checkDead();
 
     }

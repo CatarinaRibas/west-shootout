@@ -4,6 +4,7 @@ import westshootout.gameobjects.Board;
 import westshootout.gameobjects.Dice;
 import westshootout.gameobjects.ObjectFactory;
 import westshootout.gameobjects.Player;
+import westshootout.gameobjects.squares.Square;
 import westshootout.simpleGFX.MainMenuGFX;
 import westshootout.simpleGFX.GameOverGFX;
 import westshootout.simpleGFX.BoardGFX;
@@ -71,6 +72,16 @@ public class Game {
 
     }
 
+    public void switchPos(Player player, int playerNum) {
+        Square tempSquare = player.getCurrentSquare();
+        for (Player player2 : players) {
+            if (player2.getPlayerNumber() == playerNum) {
+                player.move(player2.getCurrentSquare());
+                player2.move(tempSquare);
+            }
+        }
+    }
+
     public boolean mainMenu() {
 
         MainMenuGFX mainMenu = new MainMenuGFX(this);
@@ -91,6 +102,11 @@ public class Game {
 
                 System.out.println(player.getPlayerNumber());
                 boardGFX.setActivePlayer(player);
+
+                if (player.isSkipped()) {
+                    player.setSkipped(false);
+                    continue;
+                }
 
                 player.chooseAction();
 

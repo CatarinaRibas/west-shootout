@@ -199,7 +199,7 @@ public class Board {
         grid[0][5].setNextSquareA(grid[0][4]);
         grid[0][5].setNextSquareB(grid[1][5]);
         // -----
-        grid[0][4].setNextSquareB(grid[0][3]);
+        grid[0][4].setNextSquareA(grid[0][3]);
         // Double-direction: goto NW path.
         grid[0][3].setNextSquareA(grid[0][2]);
         grid[0][3].setNextSquareB(grid[1][3]);

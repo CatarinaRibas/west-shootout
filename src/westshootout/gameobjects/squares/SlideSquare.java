@@ -18,15 +18,19 @@ public class SlideSquare extends Square{
         switch (squareType) {
             case SLIDE_EAST:
                 player.move(board.getGrid()[super.getxPos() + 2][super.getyPos()]);
+                player.getCurrentSquare().effect(player);
                 return true;
             case SLIDE_SOUTH:
                 player.move(board.getGrid()[super.getxPos()][super.getyPos() + 2]);
+                player.getCurrentSquare().effect(player);
                 return true;
             case SLIDE_WEST:
                 player.move(board.getGrid()[super.getxPos() - 2][super.getyPos()]);
+                player.getCurrentSquare().effect(player);
                 return true;
             case SLIDE_NORTH:
                 player.move(board.getGrid()[super.getxPos()][super.getyPos() - 2]);
+                player.getCurrentSquare().effect(player);
                 return true;
         }
         System.out.println("Error in SlideSquare.effect(). Returned false.");

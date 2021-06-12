@@ -11,7 +11,6 @@ public class BattleSquare extends Square{
     public boolean effect(Player player) {
 
         player.setCanShoot(true);
-        player.setCanReload(true);
         return true;
 
     }
