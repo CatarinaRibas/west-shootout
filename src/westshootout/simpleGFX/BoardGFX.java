@@ -32,6 +32,10 @@ public class BoardGFX implements KeyboardHandler {
     private Picture character2Picture;
     private Picture character3Picture;
     private Picture character4Picture;
+    private Picture player1Target;
+    private Picture player2Target;
+    private Picture player3Target;
+    private Picture player4Target;
     private Picture dice;
 
     private Picture deathSquare;
@@ -52,6 +56,9 @@ public class BoardGFX implements KeyboardHandler {
     //change AskRoll to TEXT
     private Text askRollText;
     private Text movesLeftText;
+    private Text startTurnText;
+    private Text bonusText;
+    private Text badLuckText;
     private Picture backgroundText;
 
     private Text switchPlaces;
@@ -97,9 +104,10 @@ public class BoardGFX implements KeyboardHandler {
     // Keyboard properties.
     private Keyboard keyboard;
 
-    private KeyboardEvent targetA = new KeyboardEvent();
-    private KeyboardEvent targetB = new KeyboardEvent();
-    private KeyboardEvent targetC = new KeyboardEvent();
+    private KeyboardEvent target1 = new KeyboardEvent();
+    private KeyboardEvent target2 = new KeyboardEvent();
+    private KeyboardEvent target3 = new KeyboardEvent();
+    private KeyboardEvent target4 = new KeyboardEvent();
     private KeyboardEvent shoot = new KeyboardEvent();
     private KeyboardEvent reload = new KeyboardEvent();
     private KeyboardEvent move = new KeyboardEvent();
@@ -112,9 +120,12 @@ public class BoardGFX implements KeyboardHandler {
     private boolean moveReloaded;
     private boolean moved;
     private boolean playerChoice;
-    private boolean targetAselected;
-    private boolean targetBselected;
-    private boolean targetCselected;
+    private boolean target1Valid;
+    private boolean target2Valid;
+    private boolean target3Valid;
+    private boolean target4Valid;
+    private boolean aiming;
+
 
     //SOUND
 
@@ -123,88 +134,99 @@ public class BoardGFX implements KeyboardHandler {
     private Sound shotSound;
     private Sound reloadSound;
     private Sound killSound;
+    private Sound cardSound;
+    private Sound winnerSound;
+
 
     //Constuction
     public BoardGFX(Game game) {
 
         this.game = game;
-
         this.keyboard = new Keyboard(this);
-
         this.gridGFX = new Picture[game.getBoard().BOARD_SIZE][game.getBoard().BOARD_SIZE];
         createBoardGFX();
 
         background = new Picture(PADDING, PADDING, "numMenu.png");
-
         dice = new Picture(PADDING + 150, 400, "Dice1.png");
-
         card = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + 70, 350, "pickACard.png");
 
         //askRoll = new Rectangle(BOARD_X_MARGIN + 300 ,BOARD_Y_MARGIN - 60, 200, 50);
 
         moveButton = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE - 100, game.getBoard().BOARD_SIZE * SQUARE_SIZE + 100, "move1.png");
-
         shootButton = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + 300, game.getBoard().BOARD_SIZE * SQUARE_SIZE + 100, "shoot1.png");
-
         reloadButton = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + 300, game.getBoard().BOARD_SIZE * SQUARE_SIZE + 100, "reload1.png");
 
         portrait1 = new Rectangle(BOARD_X_MARGIN - 200, game.getBoard().BOARD_SIZE * SQUARE_SIZE, PORTRAIT_SIZE, PORTRAIT_SIZE);
         portrait1.setColor(Color.BLUE);
         character1Picture = new Picture(BOARD_X_MARGIN - 200, game.getBoard().BOARD_SIZE * SQUARE_SIZE + 6, "character1.png");
+        player1Target = new Picture(BOARD_X_MARGIN - 200, game.getBoard().BOARD_SIZE * SQUARE_SIZE + 6, "mira.png");
         portrait1Picture = new Picture(BOARD_X_MARGIN - 300, game.getBoard().BOARD_SIZE * SQUARE_SIZE + 15, "playerOne.png");
         portrait1Picture.grow(10, 10);
         tokenText1 = new Text(BOARD_X_MARGIN - 270, game.getBoard().BOARD_SIZE * SQUARE_SIZE - 33, "Player 1");
-        player1Token = new Picture(BOARD_X_MARGIN + ( SQUARE_SIZE), BOARD_Y_MARGIN + ( SQUARE_SIZE), "playerOne.png");
+        player1Token = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE), BOARD_Y_MARGIN + (SQUARE_SIZE), "playerOne.png");
         player1Available = new Rectangle(BOARD_X_MARGIN - 200, game.getBoard().BOARD_SIZE * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
         player1Available.setColor(Color.BLACK);
-        player1Lives = new Picture(BOARD_X_MARGIN - 200, game.getBoard().BOARD_SIZE * SQUARE_SIZE - SQUARE_SIZE + 25, "maxLives.png");
+        player1Lives = new Picture(BOARD_X_MARGIN - 200, game.getBoard().BOARD_SIZE * SQUARE_SIZE - SQUARE_SIZE + 25, "3Lives.png");
         player1Bullets = new Picture(BOARD_X_MARGIN - 200, game.getBoard().BOARD_SIZE * SQUARE_SIZE - SQUARE_SIZE - 20, "maxBullets.png");
 
         portrait2 = new Rectangle(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, BOARD_Y_MARGIN + 100, PORTRAIT_SIZE, PORTRAIT_SIZE);
         portrait2.setColor(Color.RED);
         character2Picture = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, BOARD_Y_MARGIN + 106, "character2.png");
+        player2Target = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, BOARD_Y_MARGIN + 106, "mira.png");
         tokenText2 = new Text(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE + SQUARE_SIZE + 80, BOARD_Y_MARGIN + 68, "Player 2");
-        player2Token = new Picture(BOARD_X_MARGIN + ( SQUARE_SIZE), BOARD_Y_MARGIN + ( SQUARE_SIZE), "playerTwo.png");
+        player2Token = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE), BOARD_Y_MARGIN + (SQUARE_SIZE), "playerTwo.png");
         player2Available = new Rectangle(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE + 100, BOARD_Y_MARGIN + 100, SQUARE_SIZE, SQUARE_SIZE);
         player2Available.setColor(Color.BLACK);
         portrait2Picture = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE + SQUARE_SIZE + 50, BOARD_Y_MARGIN + 120, "playerTwo.png");
         portrait2Picture.grow(10, 10);
-        player2Lives = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, BOARD_Y_MARGIN - SQUARE_SIZE + 100 + 25, "maxLives.png");
+        player2Lives = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, BOARD_Y_MARGIN - SQUARE_SIZE + 100 + 25, "3Lives.png");
         player2Bullets = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, BOARD_Y_MARGIN - SQUARE_SIZE + 100 - 20, "maxBullets.png");
+
+
         portrait3 = new Rectangle(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, game.getBoard().BOARD_SIZE * SQUARE_SIZE, PORTRAIT_SIZE, PORTRAIT_SIZE);
         portrait3.setColor(Color.YELLOW);
-
         character3Picture = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, game.getBoard().BOARD_SIZE * SQUARE_SIZE + 6, "character3.png");
+        player3Target = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, game.getBoard().BOARD_SIZE * SQUARE_SIZE + 6, "mira.png");
         tokenText3 = new Text(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE + PORTRAIT_SIZE + 50, game.getBoard().BOARD_SIZE * SQUARE_SIZE - 33, "Player 3");
         player3Token = new Picture(0, 0, "playerThree.png");
         player3Available = new Rectangle(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, game.getBoard().BOARD_SIZE * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
         player3Available.setColor(Color.BLACK);
         portrait3Picture = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE + PORTRAIT_SIZE + 30, game.getBoard().BOARD_SIZE * SQUARE_SIZE + 20, "playerThree.png");
         portrait3Picture.grow(10, 10);
-        player3Lives = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, game.getBoard().BOARD_SIZE * SQUARE_SIZE - SQUARE_SIZE + 25, "maxLives.png");
+        player3Lives = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, game.getBoard().BOARD_SIZE * SQUARE_SIZE - SQUARE_SIZE + 25, "3Lives.png");
         player3Bullets = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, game.getBoard().BOARD_SIZE * SQUARE_SIZE - SQUARE_SIZE - 20, "maxBullets.png");
 
         portrait4 = new Rectangle(BOARD_X_MARGIN - 200, BOARD_Y_MARGIN + 100, PORTRAIT_SIZE, PORTRAIT_SIZE);
         portrait4.setColor(Color.GREEN);
         character4Picture = new Picture(BOARD_X_MARGIN - 200, BOARD_Y_MARGIN + 106, "character4.png");
+        player4Target = new Picture(BOARD_X_MARGIN - 200, BOARD_Y_MARGIN + 106, "mira.png");
         tokenText4 = new Text(BOARD_X_MARGIN - 270, game.getBoard().BOARD_SIZE * SQUARE_SIZE - 682, "Player 4");
         player4Token = new Picture(0, 0, "playerFourth.png");
         player4Available = new Rectangle(BOARD_X_MARGIN - 200, BOARD_Y_MARGIN + 100, SQUARE_SIZE, SQUARE_SIZE);
         player4Available.setColor(Color.BLACK);
         portrait4Picture = new Picture(BOARD_X_MARGIN - 295, BOARD_Y_MARGIN + 115, "playerFourth.png");
         portrait4Picture.grow(10, 10);
-        player4Lives = new Picture(BOARD_X_MARGIN - 200, BOARD_Y_MARGIN - SQUARE_SIZE + 100 + 25, "maxLives.png");
+        player4Lives = new Picture(BOARD_X_MARGIN - 200, BOARD_Y_MARGIN - SQUARE_SIZE + 100 + 25, "3Lives.png");
         player4Bullets = new Picture(BOARD_X_MARGIN - 200, BOARD_Y_MARGIN - SQUARE_SIZE + 100 - 20, "maxBullets.png");
 
         bang = new Picture(BOARD_X_MARGIN + 150, BOARD_Y_MARGIN + 200, "Bang.png");
 
-        backgroundText = new Picture(BOARD_X_MARGIN + 325 - 100, BOARD_Y_MARGIN - 40 - 20,"backgroundMessage.png");
+        backgroundText = new Picture(BOARD_X_MARGIN + 325 - 100, BOARD_Y_MARGIN - 40 - 20, "backgroundMessage.png");
+        bonusText = new Text(BOARD_X_MARGIN + 300, BOARD_Y_MARGIN - 40, "Lucky card drawn! What does it do?");
+        bonusText.setColor(Color.GREEN);
+        bonusText.grow(20, 20);
+
+        badLuckText = new Text(BOARD_X_MARGIN + 300, BOARD_Y_MARGIN - 40, "Bad luck card drawn! Uh oh!");
+        badLuckText.setColor(Color.RED);
+        badLuckText.grow(20,20);
 
         diceSound = new Sound("/DiceRoll.wav");
         walkSound = new Sound("/Walk.wav");
-        shotSound = new Sound ("/Shot.wav");
+        shotSound = new Sound("/Shot.wav");
         reloadSound = new Sound("/Reload.wav");
         killSound = new Sound("/Mataram-me.wav");
+        cardSound = new Sound("/card.wav");
+        //winnerSound = new Sound("/finished.wav");
     }
 
     //Related with Board
@@ -227,28 +249,28 @@ public class BoardGFX implements KeyboardHandler {
                             gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "coverSquare.png");
                             break;
                         case DEATH:
-                            gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "death square.png");
+                            gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "deathSquare.png");
                             break;
                         case SLIDE_EAST:
-                            gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "slideWEST.png");
+                            gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "slideEAST.png");
                             break;
                         case SLIDE_SOUTH:
                             gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "slideSOUTH.png");
                             break;
                         case SLIDE_WEST:
-                            gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "slideEAST.png");
+                            gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "slideWEST.png");
                             break;
                         case SLIDE_NORTH:
                             gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "slideNORTH.png");
                             break;
                         case BATTLE_CYAN:
-                            gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "square 3 (1).png");
+                            gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "square3.png");
                             break;
                         case BATTLE_GREEN:
-                            gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "square 2.png");
+                            gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "square2.png");
                             break;
                         case BATTLE_ORANGE:
-                            gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "square 1.png");
+                            gridGFX[i][j] = new Picture(BOARD_X_MARGIN + (SQUARE_SIZE * i), BOARD_Y_MARGIN + (SQUARE_SIZE * j), "square1.png");
                             break;
                     }
                 }
@@ -319,11 +341,10 @@ public class BoardGFX implements KeyboardHandler {
 
     public void askRoll() {
 
-        backgroundText.draw();
+        askRollText = new Text(BOARD_X_MARGIN + 315, BOARD_Y_MARGIN - 40, "Player " + activePlayer.getPlayerNumber() + " , roll your bones, cowboy!");
+        askRollText.grow(20, 20);
 
-        askRollText = new Text(BOARD_X_MARGIN + 325, BOARD_Y_MARGIN - 40, "Player " + activePlayer.getPlayerNumber() + " , please Roll the dice");
-        askRollText.grow(15, 20);
-        switch (activePlayer.getPlayerNumber()){
+        switch (activePlayer.getPlayerNumber()) {
             case 1:
                 askRollText.setColor(Color.BLUE);
                 break;
@@ -354,7 +375,7 @@ public class BoardGFX implements KeyboardHandler {
 
     //Related with Player
 
-    //Show Players Portait; This method depends on the numbers of players selected
+    // Show Players Portait; This method depends on the numbers of players selected
     public void showPortrait() {
         for (int i = 0; i < game.getPlayers().length; i++) {
             switch (i) {
@@ -405,20 +426,86 @@ public class BoardGFX implements KeyboardHandler {
             switch (i) {
                 case 0:
                     portrait1.delete();
+                    player1Available.delete();
+                    tokenText1.delete();
+                    player1Token.delete();
+                    character1Picture.delete();
+                    portrait1Picture.delete();
+                    player1Lives.delete();
+                    player1Bullets.delete();
                     break;
                 case 1:
                     portrait2.delete();
+                    player2Available.delete();
+                    tokenText2.delete();
+                    player2Token.delete();
+                    character2Picture.delete();
+                    portrait2Picture.delete();
+                    player2Lives.delete();
+                    player2Bullets.delete();
                     break;
                 case 2:
                     portrait3.delete();
+                    player3Available.delete();
+                    tokenText3.delete();
+                    player3Token.delete();
+                    character3Picture.delete();
+                    portrait3Picture.delete();
+                    player3Lives.delete();
+                    player3Bullets.delete();
                     break;
                 case 3:
                     portrait4.delete();
+                    player4Available.delete();
+                    tokenText4.delete();
+                    player4Token.delete();
+                    character4Picture.delete();
+                    portrait4Picture.delete();
+                    player4Lives.delete();
+                    player4Bullets.delete();
                     break;
                 default:
                     portrait1.delete();
+                    tokenText1.delete();
+                    player1Token.delete();
+                    character1Picture.delete();
+                    portrait1Picture.delete();
+                    player1Lives.delete();
+                    player1Bullets.delete();
                     break;
             }
+        }
+    }
+
+    // Changes character image to a tombstone
+    public void buryPlayer(Player player) {
+
+        switch (player.getPlayerNumber()) {
+
+            case 1:
+                character1Picture.delete();
+                character1Picture = new Picture(BOARD_X_MARGIN - 200, game.getBoard().BOARD_SIZE * SQUARE_SIZE + 6, "tombstone.png");
+                character1Picture.draw();
+                player1Token.delete();
+                break;
+            case 2:
+                character2Picture.delete();
+                character2Picture = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, BOARD_Y_MARGIN + 106, "tombstone.png");
+                character2Picture.draw();
+                player2Token.delete();
+                break;
+            case 3:
+                character3Picture.delete();
+                character3Picture = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, game.getBoard().BOARD_SIZE * SQUARE_SIZE + 6, "tombstone.png");
+                character3Picture.draw();
+                player3Token.delete();
+                break;
+            case 4:
+                character4Picture.delete();
+                character4Picture = new Picture(BOARD_X_MARGIN - 200, BOARD_Y_MARGIN + 106, "tombstone.png");
+                character4Picture.draw();
+                player4Token.delete();
+                break;
         }
     }
 
@@ -467,22 +554,68 @@ public class BoardGFX implements KeyboardHandler {
     }
 
     public void showMoveShoot() {
+
         moveShooted = true;
         shootButton.draw();
         moveButton.draw();
+
+        startTurnText = new Text(BOARD_X_MARGIN + 280, BOARD_Y_MARGIN - 40, "Player " + activePlayer.getPlayerNumber() + "'s turn! Draw n' shoot or get movin' pardner!");
+        startTurnText.grow(20, 20);
+        startTurnText.draw();
+
+        switch (activePlayer.getPlayerNumber()) {
+            case 1:
+                startTurnText.setColor(Color.BLUE);
+                break;
+            case 2:
+                startTurnText.setColor(Color.RED);
+                break;
+            case 3:
+                startTurnText.setColor(Color.YELLOW);
+                break;
+            case 4:
+                startTurnText.setColor(Color.GREEN);
+                break;
+            default:
+                startTurnText.setColor(Color.BLUE);
+                break;
+        }
     }
 
     public void showMoveReload() {
         moveReloaded = true;
         moveButton.draw();
         reloadButton.draw();
+
+        startTurnText = new Text(BOARD_X_MARGIN + 300, BOARD_Y_MARGIN - 40, "Player " + activePlayer.getPlayerNumber() + "'s turn! Load up or high-tail it pardner!");
+        startTurnText.grow(20, 20);
+        startTurnText.draw();
+
+        switch (activePlayer.getPlayerNumber()) {
+            case 1:
+                startTurnText.setColor(Color.BLUE);
+                break;
+            case 2:
+                startTurnText.setColor(Color.RED);
+                break;
+            case 3:
+                startTurnText.setColor(Color.YELLOW);
+                break;
+            case 4:
+                startTurnText.setColor(Color.GREEN);
+                break;
+            default:
+                startTurnText.setColor(Color.BLUE);
+                break;
+        }
     }
 
     public void showInit() {
 
         keyboardInit();
         background.draw();
-        dice.draw();
+        backgroundText.draw();
+        showDice();
         card.draw();
         showBoard();
         showPortrait();
@@ -508,61 +641,99 @@ public class BoardGFX implements KeyboardHandler {
     }
 
     public void showTargets(Player[] availableTarget) {
+
         for (int i = 0; i < availableTarget.length; i++) {
-            switch (availableTarget[i].getPlayerNumber()) {
-                case 1:
-                    player1Available.draw();
-                    break;
-                case 2:
-                    player2Available.draw();
-                    break;
-                case 3:
-                    player3Available.draw();
-                    break;
-                case 4:
-                    player4Available.draw();
-                    break;
-                default:
-                    player1Available.draw();
-                    break;
+
+            if (availableTarget[i] != null) {
+
+                System.out.println(availableTarget[i].getPlayerNumber());
+
+                switch (availableTarget[i].getPlayerNumber()) {
+
+                    case 1:
+                        player1Target.draw();
+                        target1Valid = true;
+                        break;
+                    case 2:
+                        player2Target.draw();
+                        target2Valid = true;
+                        break;
+                    case 3:
+                        player3Target.draw();
+                        target3Valid = true;
+                        break;
+                    case 4:
+                        player4Target.draw();
+                        target4Valid = true;
+                        break;
+                    default:
+                        player1Available.draw();
+                        break;
+                }
+
+                aiming = true;
+            }
+            else {
+                System.out.println("null");
             }
         }
-
     }
 
     public void showCard(TypeOfCards typeOfCards) {
+
         switch (typeOfCards) {
+
             case ADDLIVES:
+
+                bonusText.draw();
                 card.delete();
                 card = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + 70, 350, "addLives.png");
                 card.draw();
                 break;
+
             case SKIPTURN:
+
+                badLuckText.draw();
                 card.delete();
-                card = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + 70, 350, "skipTurn.png");
+                card = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + 70, 350, "youDontPlayNextRound.png");
                 card.draw();
                 break;
+
             case MOVEPLACE:
+
+                bonusText.draw();
                 card.delete();
                 card = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + 70, 350, "rollAgain.png");
                 card.draw();
                 break;
+
             case REMOVELIVES:
+
+                badLuckText.draw();
                 card.delete();
                 card = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + 70, 350, "youLoseALife.png");
                 card.draw();
                 break;
+
             case OUTOFMUNITIONS:
+
+                badLuckText.draw();
                 card.delete();
                 card = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + 70, 350, "youOfBullets.png");
                 card.draw();
                 break;
+
             case TAKELIVESFROMANOTHERPLAYER:
+
+                bonusText.draw();
                 card.delete();
                 card = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + 70, 350, "takeALifeFromAnotherPlayer.png");
                 card.draw();
                 break;
+
             case SWITCHPOSITIONWITHRANDOMPLAYER:
+
+                badLuckText.draw();
                 card.delete();
                 card = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + 70, 350, "switchWithARandomPlayer.png");
                 card.draw();
@@ -573,8 +744,10 @@ public class BoardGFX implements KeyboardHandler {
         } catch (Exception e) {
             System.out.println("Error");
         }
+        bonusText.delete();
+        badLuckText.delete();
         card.delete();
-        card = new Picture(game.getBoard().BOARD_SIZE + BOARD_X_MARGIN + 100, 400, "takeALifeFromAnotherPlayer.png");
+        card = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + 70, 350, "pickACard.png");
         card.draw();
     }
 
@@ -596,6 +769,8 @@ public class BoardGFX implements KeyboardHandler {
             case 1:
                 for (int i = 0; i < 4; i++) {
                     if (currentLives == i) {
+                        System.out.println(i+"Lives.png");
+                        player1Lives.delete();
                         player1Lives = new Picture(BOARD_X_MARGIN - 200, game.getBoard().BOARD_SIZE * SQUARE_SIZE - SQUARE_SIZE + 25, i + "Lives.png");
                         player1Lives.draw();
                         break;
@@ -605,6 +780,8 @@ public class BoardGFX implements KeyboardHandler {
             case 2:
                 for (int i = 0; i < 4; i++) {
                     if (currentLives == i) {
+                        System.out.println(i+"Lives.png");
+                        player2Lives.delete();
                         player2Lives = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, BOARD_Y_MARGIN - SQUARE_SIZE + 100 + 25, i + "Lives.png");
                         player2Lives.draw();
                         break;
@@ -614,7 +791,8 @@ public class BoardGFX implements KeyboardHandler {
             case 3:
                 for (int i = 0; i < 4; i++) {
                     if (currentLives == i) {
-                        System.out.println(i);
+                        System.out.println(i+"Lives.png");
+                        player3Lives.delete();
                         player3Lives = new Picture(game.getBoard().BOARD_SIZE * SQUARE_SIZE + BOARD_X_MARGIN + PORTRAIT_SIZE, game.getBoard().BOARD_SIZE * SQUARE_SIZE - SQUARE_SIZE + 25, i + "Lives.png");
                         player3Lives.draw();
                         break;
@@ -624,7 +802,8 @@ public class BoardGFX implements KeyboardHandler {
             case 4:
                 for (int i = 0; i < 4; i++) {
                     if (currentLives == i) {
-                        System.out.println(i);
+                        System.out.println(i+"Lives.png");
+                        player4Lives.delete();
                         player4Lives = new Picture(BOARD_X_MARGIN - 200, BOARD_Y_MARGIN - SQUARE_SIZE + 100 + 25, i + "Lives.png");
                         player4Lives.draw();
                         break;
@@ -691,10 +870,8 @@ public class BoardGFX implements KeyboardHandler {
 
     public void setMovesLeft(int movesLeft) {
 
-        backgroundText.draw();
-
-        movesLeftText = new Text(BOARD_X_MARGIN + 325, BOARD_Y_MARGIN - 40, "Player " + activePlayer.getPlayerNumber() + " , you have " + movesLeft + " moves available");
-        movesLeftText.grow(15, 20);
+        movesLeftText = new Text(BOARD_X_MARGIN + 325, BOARD_Y_MARGIN - 40, "Player " + activePlayer.getPlayerNumber() + " , you have " + movesLeft + " moves left!");
+        movesLeftText.grow(20, 20);
 
         switch (activePlayer.getPlayerNumber()) {
             case 1:
@@ -740,22 +917,27 @@ public class BoardGFX implements KeyboardHandler {
 
             switch (i) {
                 case 0:
+                    player1Token.delete();
                     player1Token = new Picture(BOARD_X_MARGIN + (xTokenPosition * SQUARE_SIZE), BOARD_Y_MARGIN + (yTokenPosition * SQUARE_SIZE), "playerOne.png");
                     player1Token.draw();
                     break;
                 case 1:
+                    player2Token.delete();
                     player2Token = new Picture(BOARD_X_MARGIN + (xTokenPosition * SQUARE_SIZE), BOARD_Y_MARGIN + (yTokenPosition * SQUARE_SIZE), "playerTwo.png");
                     player2Token.draw();
                     break;
                 case 2:
+                    player3Token.delete();
                     player3Token = new Picture(BOARD_X_MARGIN + (xTokenPosition * SQUARE_SIZE), BOARD_Y_MARGIN + (yTokenPosition * SQUARE_SIZE), "playerThree.png");
                     player3Token.draw();
                     break;
                 case 3:
+                    player4Token.delete();
                     player4Token = new Picture(BOARD_X_MARGIN + (xTokenPosition * SQUARE_SIZE), BOARD_Y_MARGIN + (yTokenPosition * SQUARE_SIZE), "playerFourth.png");
                     player4Token.draw();
                     break;
                 default:
+                    player1Token.delete();
                     player1Token = new Picture(BOARD_X_MARGIN + (xTokenPosition * SQUARE_SIZE), BOARD_Y_MARGIN + (yTokenPosition * SQUARE_SIZE), "playerOne.png");
                     player1Token.draw();
                     break;
@@ -798,14 +980,49 @@ public class BoardGFX implements KeyboardHandler {
         }
     }
 
-    public void hideButtons() {
+    public void hideButtonsAndMessage() {
         shootButton.delete();
         reloadButton.delete();
         moveButton.delete();
+        startTurnText.delete();
+    }
+
+    public void hideTargets() {
+        player1Target.delete();
+        player2Target.delete();
+        player3Target.delete();
+        player4Target.delete();
     }
 
     public void hideAll() {
 
+        hideAskRoll();
+        hideBoard();
+        hideMovesLeft();
+        hidePortrait();
+        hideDice();
+        movesLeftText.delete();
+        startTurnText.delete();
+        background.delete();
+        card.delete();
+        backgroundText.delete();
+
+    }
+
+    public Sound getShotSound() {
+        return shotSound;
+    }
+
+    public Sound getKillSound() {
+        return killSound;
+    }
+
+    public Sound getCardSound(){
+        return cardSound;
+    }
+
+    public Sound getWinnerSound(){
+        return winnerSound;
     }
 
     public void keyboardInit() {
@@ -826,17 +1043,21 @@ public class BoardGFX implements KeyboardHandler {
         reload.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
         keyboard.addEventListener(reload);
 
-        targetA.setKey(KeyboardEvent.KEY_A);
-        targetA.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        keyboard.addEventListener(targetA);
+        target1.setKey(KeyboardEvent.KEY_1);
+        target1.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
+        keyboard.addEventListener(target1);
 
-        targetB.setKey(KeyboardEvent.KEY_B);
-        targetB.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        keyboard.addEventListener(targetB);
+        target2.setKey(KeyboardEvent.KEY_2);
+        target2.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
+        keyboard.addEventListener(target2);
 
-        targetC.setKey(KeyboardEvent.KEY_C);
-        targetC.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        keyboard.addEventListener(targetC);
+        target3.setKey(KeyboardEvent.KEY_3);
+        target3.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
+        keyboard.addEventListener(target3);
+
+        target4.setKey(KeyboardEvent.KEY_4);
+        target4.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
+        keyboard.addEventListener(target4);
 
         moveA.setKey(KeyboardEvent.KEY_1);
         moveA.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
@@ -847,10 +1068,25 @@ public class BoardGFX implements KeyboardHandler {
         keyboard.addEventListener(moveB);
     }
 
+    public void keyboardRemove() {
+
+        keyboard.removeEventListener(roll);
+        keyboard.removeEventListener(shoot);
+        keyboard.removeEventListener(reload);
+        keyboard.removeEventListener(move);
+        keyboard.removeEventListener(target1);
+        keyboard.removeEventListener(target2);
+        keyboard.removeEventListener(target3);
+        keyboard.removeEventListener(target4);
+        keyboard.removeEventListener(moveA);
+        keyboard.removeEventListener(moveB);
+    }
+
     @Override
     public void keyPressed(KeyboardEvent keyboardEvent) {
         switch (keyboardEvent.getKey()) {
             case KeyboardEvent.KEY_SPACE:
+
                 if (rolled) {
                     diceSound.play(true);
                     activePlayer.setHasRolled(true);
@@ -858,61 +1094,115 @@ public class BoardGFX implements KeyboardHandler {
                     hideAskRoll();
                 }
                 break;
+
             case KeyboardEvent.KEY_S:
+
                 if (moveShooted) {
+
                     shotSound.play(true);
-                    killSound.play(true);
                     System.out.println("Shoot that guy");
                     System.out.println(activePlayer);
                     activePlayer.setWillShoot(true);
                     moveShooted = false;
-                    hideButtons();
+                    hideButtonsAndMessage();
                 }
                 break;
+
             case KeyboardEvent.KEY_R:
+
                 if (moveReloaded) {
+
                     reloadSound.play(true);
                     System.out.println("reloading");
                     activePlayer.setWillReload(true);
                     moveReloaded = false;
-                    hideButtons();
+                    hideButtonsAndMessage();
                 }
                 break;
+
             case KeyboardEvent.KEY_M:
+
                 if (moveReloaded || moveShooted) {
+
                     activePlayer.setWillMove(true);
                     moveShooted = false;
                     moveReloaded = false;
-                    hideButtons();
+                    hideButtonsAndMessage();
                 }
+                break;
+
             case KeyboardEvent.KEY_1:
+
                 if (moved) {
+
                     walkSound.play(true);
                     activePlayer.setHasMovedToA(true);
                     moved = false;
+                    break;
                 }
-                break;
+
+                if (aiming && target1Valid) {
+
+                    activePlayer.setTarget(1);
+                    aiming = false;
+                    target1Valid = false;
+                    target2Valid = false;
+                    target3Valid = false;
+                    target4Valid = false;
+                    hideTargets();
+                    break;
+                }
 
             case KeyboardEvent.KEY_2:
+
                 if (moved) {
+
                     walkSound.play(true);
                     activePlayer.setHasMovedToB(true);
                     moved = false;
+                    break;
                 }
-                break;
+
+                if (aiming && target2Valid) {
+
+                    activePlayer.setTarget(2);
+                    aiming = false;
+                    target1Valid = false;
+                    target2Valid = false;
+                    target3Valid = false;
+                    target4Valid = false;
+                    hideTargets();
+                    break;
+                }
 
             case KeyboardEvent.KEY_3:
-                if (playerChoice && activePlayer.getPlayerNumber() != 3 && game.getPlayers()[2] != null) {
-                    activePlayer.getGame().switchPos(activePlayer, 3);
-                    playerChoice = false;
+
+                if (aiming && target3Valid) {
+
+                    activePlayer.setTarget(3);
+                    aiming = false;
+                    target1Valid = false;
+                    target2Valid = false;
+                    target3Valid = false;
+                    target4Valid = false;
+                    hideTargets();
                 }
                 break;
 
             case KeyboardEvent.KEY_4:
-                if (playerChoice && activePlayer.getPlayerNumber() != 4 && game.getPlayers()[3] != null) {
-                    activePlayer.getGame().switchPos(activePlayer, 4);
-                    playerChoice = false;
+
+                if (aiming && target4Valid) {
+
+                    activePlayer.setTarget(4);
+                    aiming = false;
+                    target1Valid = false;
+                    target2Valid = false;
+                    target3Valid = false;
+                    target4Valid = false;
+                    hideTargets();
                 }
+                break;
+
         }
     }
 

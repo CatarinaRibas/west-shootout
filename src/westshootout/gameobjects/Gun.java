@@ -25,13 +25,9 @@ public class Gun {
     }
 
     // Useable in player's turn, through player class. Method uses up your game turn to set your ammo back at full capacity.
-    // Only works if gun is fully empty. Returns true if reload worked, false otherwise.
     public boolean reload() {
-        if (!bulletsLeft()) {
-            remainingBullets = maxBullets;
-            return true;
-        }
-        return false;
+        remainingBullets = maxBullets;
+        return true;
     }
 
     // Checks if there are any remaining bullets. If gun is empty return false, otherwise return true.

@@ -27,6 +27,8 @@ public class Game {
 
     private boolean isWon;
 
+    private boolean finishedMusicGoingOn;
+
     // GFX
     private BoardGFX boardGFX;
 
@@ -34,8 +36,9 @@ public class Game {
 
     //SOUND
 
-    private Sound menuSound;
+    static Sound menuSound;
     private Sound gameSound;
+    //private static Sound finishedSound = new Sound("/finished.wav");
 
     public Game() {
 
@@ -46,6 +49,7 @@ public class Game {
         this.menuSound = new Sound("/Menu.wav");
         this.gameSound = new Sound("/Theme.wav");
         this.isWon = false;
+        this.finishedMusicGoingOn = false;
 
     }
 
@@ -79,16 +83,6 @@ public class Game {
 
     }
 
-    public void switchPos(Player player, int playerNum) {
-        Square tempSquare = player.getCurrentSquare();
-        for (Player player2 : players) {
-            if (player2.getPlayerNumber() == playerNum) {
-                player.move(player2.getCurrentSquare());
-                player2.move(tempSquare);
-            }
-        }
-    }
-
     public boolean mainMenu() {
 
         menuSound.setLoop(10);
@@ -110,11 +104,13 @@ public class Game {
 
         while (!isWon()) {
 
-            System.out.println("Entered while !isWon");
-
             for (Player player : players) {
 
-                System.out.println(player.getPlayerNumber());
+                if (player.isDead()){
+                    continue;
+                }
+
+                System.out.println("Player " + player.getPlayerNumber() + "'s turn!");
                 boardGFX.setActivePlayer(player);
 
                 if (player.isSkipped()) {
@@ -124,7 +120,7 @@ public class Game {
 
                 player.chooseAction();
 
-                System.out.println("action chosen");
+                System.out.println("Turn done!");
 
                 if (checkVictory()) {
                     break;
@@ -136,11 +132,12 @@ public class Game {
     }
 
     public boolean checkVictory() {
+
         int playersAlive = 0;
 
         for (Player player : players) {
 
-            if (!player.checkDead()) {
+            if (!player.isDead()) {
                 playersAlive++;
             }
         }
@@ -157,7 +154,11 @@ public class Game {
     public void announceWinner() {
         boardGFX.hideAll();
         gameOverGFX.setWinner(getWinnerNum());
+        //gameSound.stop();
+        //boardGFX.getWinnerSound().play(true);
+
     }
+
 
     // Getters
     public boolean isWon() {
@@ -181,6 +182,17 @@ public class Game {
         return players;
     }
 
+    public Player getPlayerByNum(int playerNum) {
+
+        for (Player player : this.players) {
+
+            if (player.getPlayerNumber() == playerNum) {
+                return player;
+            }
+        }
+        return null;
+    }
+
     public Dice getDice() {
         return dice;
     }
@@ -188,6 +200,7 @@ public class Game {
     public Board getBoard() {
         return board;
     }
+
 
     // Setters
     public void setWon(boolean won) {
@@ -202,5 +215,9 @@ public class Game {
             }
         }
 
+    }
+
+    public void setFinishedMusicGoingOn(boolean finishedMusicGoingOn){
+        this.finishedMusicGoingOn = finishedMusicGoingOn;
     }
 }

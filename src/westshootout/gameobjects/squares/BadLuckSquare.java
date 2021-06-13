@@ -4,7 +4,7 @@ import westshootout.gameobjects.Player;
 import westshootout.gameobjects.cards.Card;
 import westshootout.gameobjects.cards.TypeOfCards;
 
-public class BadLuckSquare extends Square{
+public class BadLuckSquare extends Square {
 
     private SquareType squareType;
 
@@ -14,7 +14,8 @@ public class BadLuckSquare extends Square{
 
     public boolean effect(Player player) {
 
-        TypeOfCards badCard = TypeOfCards.values()[TypeOfCards.values().length - ((int) (Math.ceil(Math.random() * 4) - 1) - 1)];
+        TypeOfCards badCard = TypeOfCards.values()[TypeOfCards.values().length - ((int) (Math.random() * 4)) - 1];
+        player.getGame().getBoardGFX().getCardSound().play(true);
         player.getGame().getBoardGFX().showCard(badCard);
         Card.cardEffect(badCard, player);
         return true;

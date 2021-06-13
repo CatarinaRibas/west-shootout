@@ -36,9 +36,7 @@ public class Player {
     private boolean hasRolled;
     private boolean hasMovedToA;
     private boolean hasMovedToB;
-    private boolean targetA;
-    private boolean targetB;
-    private boolean targetC;
+    private int target;
     // -----
 
     public Player(int playerNumber, Game game) {
@@ -73,6 +71,7 @@ public class Player {
 
         if (currentSquare.getSquareType().equals(SquareType.COVER)) {
             this.canReload = true;
+            this.canShoot = false;
         }
 
         if (!gun.bulletsLeft()) {
@@ -80,28 +79,33 @@ public class Player {
             this.canReload = true;
         }
 
-        System.out.println(canShoot);
-        System.out.println(canReload);
+        System.out.println("Choosing action");
 
         if (canShoot) {
 
+            System.out.println("Shoot or move?");
+
             this.game.getBoardGFX().showMoveShoot();
-            System.out.println(this);
 
             while (!this.willShoot && !this.willMove) {
-                System.out.println("This");
+
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    System.out.println("Error in chooseAction, shoot/move loop.");
+                }
+
             }
 
             if (this.willMove) {
-                System.out.println("Moving (shoot branch)");
+
                 prepareMove();
                 return;
             }
 
             if (this.willShoot) {
 
-                System.out.println("Shoot branch");
-                chooseTarget();
+                prepareTarget();
                 return;
 
             }
@@ -109,33 +113,40 @@ public class Player {
 
         if (canReload) {
 
-            System.out.println("Entering reload branch");
+            System.out.println("Reload or move?");
+
             this.game.getBoardGFX().showMoveReload();
 
             while (!this.willMove && !this.willReload) {
-                System.out.println("That");
+
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    System.out.println("Error in chooseAction, reload/move loop.");
+                }
+
             }
 
             if (this.willMove) {
-                System.out.println("Prepare move");
+
                 prepareMove();
                 return;
             }
 
             if (this.willReload) {
-                System.out.println("reloading...");
+
                 gun.reload();
                 game.getBoardGFX().updateBullets();
                 return;
             }
         }
 
-        System.out.println("Preparing move");
+        System.out.println("Can't shoot or reload: moving.");
         prepareMove();
         return;
     }
 
-    public boolean chooseTarget() {
+    public boolean prepareTarget() {
 
         Player[] availableTargets = availableTargets();
 
@@ -147,13 +158,13 @@ public class Player {
             return true;
         }
 
+        //Only one guy to shoot, shooting automatically.
+
         if (!(availableTargets[0] == null) && availableTargets[1] == null && availableTargets[2] == null) {
             System.out.println("Shooting the only guy available");
             fireAt(availableTargets[0]);
             return true;
         }
-
-        System.out.println("shooting nobody");
 
         if (availableTargets[0] == null && !(availableTargets[1] == null) && availableTargets[2] == null) {
             fireAt(availableTargets[1]);
@@ -165,42 +176,75 @@ public class Player {
             return true;
         }
 
-        if (!(availableTargets[0] == null) && !(availableTargets[1] == null) && availableTargets[2] == null) {
-            chooseFromTwo(availableTargets[0], availableTargets[1]);
-            return true;
-        }
+        // More than one possibility, proposing choice to player.
 
-        if (availableTargets[0] == null && !(availableTargets[1] == null) && !(availableTargets[2] == null)) {
-            chooseFromTwo(availableTargets[1], availableTargets[2]);
-            return true;
-        }
+        chooseTarget(availableTargets);
+        return true;
 
-        if (!(availableTargets[0] == null) && availableTargets[1] == null && !(availableTargets[2] == null)) {
-            chooseFromTwo(availableTargets[0], availableTargets[2]);
-            return true;
-        }
-
-        if (!(availableTargets[0] == null) && !(availableTargets[1] == null) && !(availableTargets[2] == null)) {
-            chooseFromThree(availableTargets[0], availableTargets[1], availableTargets[2]);
-            return true;
-        }
-        return false;
     }
 
-    public void chooseFromTwo(Player targetA, Player targetB) {
+    public void chooseTarget(Player[] targets) {
 
-        this.targetA = false;
-        this.targetB = false;
+        this.target = 0;
+
+        for (Player player : targets) {
+
+            if (player == null) {
+                System.out.println("null");
+            } else {
+                System.out.println(player.getPlayerNumber());
+            }
+        }
+
+        game.getBoardGFX().showTargets(targets);
+
+        System.out.println("Choosing target");
+
+        while (this.target != 1 && this.target != 2 && this.target != 3 && this.target != 4) {
+
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                System.out.println("Error in chooseTarget, aiming loop.");
+            }
+        }
+
+        if (this.target == 1) {
+            fireAt(game.getPlayerByNum(1));
+            return;
+        }
+
+        if (this.target == 2) {
+            fireAt(game.getPlayerByNum(2));
+            return;
+        }
+
+        if (this.target == 3) {
+            fireAt(game.getPlayerByNum(3));
+            return;
+        }
+
+        if (this.target == 4) {
+            fireAt(game.getPlayerByNum(4));
+            return;
+        }
+
+    }
+
+/*    public void chooseFromTwo(Player targetA, Player targetB) {
+
+        int this.target = 0;
         Player[] targets = new Player[2];
         targets[0] = targetA;
         targets[1] = targetB;
 
         game.getBoardGFX().showTargets(targets);
 
-        while (!this.targetA || !this.targetB) {
+        while (this.target != 1 && this.target != 2 && this.target != 3 && this.target != 4) {
+            System.out.println("Aiming");
         }
 
-        if (this.targetA) {
+        if (this.target == 1) {
             fireAt(targetA);
             return;
         }
@@ -240,7 +284,7 @@ public class Player {
             fireAt(targetC);
             return;
         }
-    }
+    }*/
 
     public Player[] availableTargets() {
 
@@ -255,7 +299,7 @@ public class Player {
 
             }
 
-            if (player.getCurrentSquare().getSquareType().equals(this.currentSquare.getSquareType())) {
+            if (player.getCurrentSquare().getSquareType().equals(this.currentSquare.getSquareType()) && !player.isDead()) {
 
                 returnTargets[index] = player;
 
@@ -276,6 +320,7 @@ public class Player {
 
         if (currentLives == 0) {
             isDead = true;
+            game.getBoardGFX().buryPlayer(this);
             return true;
         }
 
@@ -298,6 +343,8 @@ public class Player {
     // Square logic should condition valid players to shoot (only others in same color of Battle Square).
     public boolean fireAt(Player player) {
 
+        //game.getBoardGFX().getShotSound().play(true);
+        game.getBoardGFX().getKillSound().play(true);
         game.getBoardGFX().showBang();
         gun.shoot(player);
         game.getBoardGFX().updateBullets();
@@ -329,19 +376,21 @@ public class Player {
 
         this.hasRolled = false;
         game.getBoardGFX().askRoll();
-        System.out.println(hasRolled);
+
+        System.out.println("Moving, roll the dice!");
 
         while (!this.hasRolled) {
 
-            System.out.println(hasRolled);
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                System.out.println("Error in prepareMove, hasRolled loop.");
+            }
 
         }
-        System.out.println(hasRolled);
 
         setMovesLeft(game.getDice().roll());
-        System.out.println(movesLeft);
         this.game.getBoardGFX().setDice(game.getDice().getResult());
-        System.out.println("Going to move");
         move();
         return true;
 
@@ -351,26 +400,29 @@ public class Player {
 
         while (movesLeft > 0) {
 
+            System.out.println("Still have moves left! 1 to go forward, 2 to turn!");
+
             hasMovedToA = false;
             hasMovedToB = false;
 
             this.game.getBoardGFX().setMovesLeft(this.movesLeft);
-            System.out.println("Moves left set");
-            System.out.println(movesLeft);
 
             while (!hasMovedToA && !hasMovedToB) {
-                System.out.println(hasMovedToA);
-                System.out.println("looping");
+
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    System.out.println("Error in move, a/b loop.");
+                }
+
             }
-            System.out.println("Left loop");
+
             if (hasMovedToA) {
-                System.out.println("Going to A");
                 currentSquare = currentSquare.getNextSquareA();
             }
             if (hasMovedToB && currentSquare.getNextSquareB() != null) {
                 currentSquare = currentSquare.getNextSquareB();
-            }
-            if (hasMovedToB && currentSquare.getNextSquareA() == null) {
+            } else if (hasMovedToB && currentSquare.getNextSquareB() == null){
                 currentSquare = currentSquare.getNextSquareA();
             }
 
@@ -386,10 +438,10 @@ public class Player {
     // USED FOR TELEPORTATION PURPOSES (Setting up players in starting positions, switching player positions)
     public boolean move(Square square) {
 
+        System.out.println("Teleported!");
         this.currentSquare = square;
         game.getBoardGFX().updatePositions(this);
         return true;
-
     }
 
 
@@ -488,11 +540,7 @@ public class Player {
         this.hasMovedToB = hasMovedToB;
     }
 
-    public void setTargetA(boolean targetA) {
-        this.targetA = targetA;
-    }
-
-    public void setTargetB(boolean targetB) {
-        this.targetB = targetB;
+    public void setTarget(int target) {
+        this.target = target;
     }
 }

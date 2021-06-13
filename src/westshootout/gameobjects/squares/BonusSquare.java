@@ -13,7 +13,8 @@ public class BonusSquare extends Square {
 
     public boolean effect(Player player) {
 
-        TypeOfCards bonusCard = TypeOfCards.values()[(int) (Math.ceil(Math.random() * 3) - 1)];
+        TypeOfCards bonusCard = TypeOfCards.values()[(int) (Math.random() * 3)];
+        player.getGame().getBoardGFX().getCardSound().play(true);
         player.getGame().getBoardGFX().showCard(bonusCard);
         Card.cardEffect(bonusCard, player);
         return true;

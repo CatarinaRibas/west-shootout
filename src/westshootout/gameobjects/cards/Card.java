@@ -15,6 +15,7 @@ public class Card {
                 if (player.getCurrentLives() < player.getMaxLives()) {
                     System.out.println("Congratulation, You gain one live");
                     player.setCurrentLives(player.getCurrentLives() + 1);
+                    player.getGame().getBoardGFX().updateLives(player);
                 }
                 break;
 
@@ -27,16 +28,19 @@ public class Card {
                 //Use method choose Player
                 //Take Lives From Another Player is the same as player get Shot
                 //With this we will check if the player is dead;
-                int randomNumberToChoosePlayer = (int) (Math.floor(Math.random() * 4));
+                int randomNumberToChoosePlayer = (int) (Math.floor(Math.random() * player.getGame().getPlayers().length));
 
-                while (randomNumberToChoosePlayer == player.getPlayerNumber() - 1) {
-                    randomNumberToChoosePlayer = (int) (Math.floor(Math.random() * 4));
+                while (player.getGame().getPlayers()[randomNumberToChoosePlayer] == player || player.getGame().getPlayers()[randomNumberToChoosePlayer].isDead()) {
+                    randomNumberToChoosePlayer = (int) (Math.floor(Math.random() * player.getGame().getPlayers().length));
                 }
                 Player playerChosen = player.getGame().getPlayers()[randomNumberToChoosePlayer];
                 playerChosen.getShot();
+                player.getGame().getBoardGFX().updateLives(playerChosen);
 
                 if (player.getMaxLives() > player.getCurrentLives()) {
                     player.setCurrentLives(player.getCurrentLives() + 1);
+                    System.out.println(player.getCurrentLives());
+                    player.getGame().getBoardGFX().updateLives(player);
                 }
                 break;
 
@@ -49,6 +53,7 @@ public class Card {
             case OUTOFMUNITIONS:
                 //The player will be out of munitions
                 player.getGun().setRemainingBullets(0);
+                player.getGame().getBoardGFX().updateBullets();
                 break;
 
             case SWITCHPOSITIONWITHRANDOMPLAYER:
@@ -56,10 +61,10 @@ public class Card {
                 //Method to choose a player random
                 //The method used shoud be the same as game.choosePlayer.
                 //Different here is that we will generate a random number before invoking the method.
-                randomNumberToChoosePlayer = (int) (Math.floor(Math.random() * 4));
+                randomNumberToChoosePlayer = (int) (Math.floor(Math.random() * player.getGame().getPlayers().length));
 
                 while (randomNumberToChoosePlayer == player.getPlayerNumber() - 1) {
-                    randomNumberToChoosePlayer = (int) (Math.floor(Math.random() * 4));
+                    randomNumberToChoosePlayer = (int) (Math.floor(Math.random() * player.getGame().getPlayers().length));
                 }
 
                 Square currentPlayerSquare = player.getCurrentSquare();

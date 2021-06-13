@@ -32,14 +32,16 @@ public class MainMenuGFX implements KeyboardHandler {
     private Picture menu;
     private Picture playersNumber;
     private Picture instructions;
-    private Picture boardGame;
-    private Picture finished;
+
+    private boolean instructionsPage1;
+    private boolean instructionsPage2;
+    private boolean playersNumberPage;
 
     private Picture arrow;
     private final static int ARROWPOSITION1 = 485;
     private final static int ARROWPOSITION2 = 658;
     private final static int ARROWPOSITION3 = 835;
-    private final static int ARROWPADDING = 25;
+    private final static int ARROWPADDING = 250;
 
     private boolean isOntheMenu = true;
 
@@ -50,7 +52,7 @@ public class MainMenuGFX implements KeyboardHandler {
         this.game = game;
         this.arrowPosition = ARROWPOSITION1;
         this.arrow = new Picture(ARROWPADDING, ARROWPOSITION1, "arrow.png");
-        this.instructions = new Picture(PADDING, PADDING, "instructions.png");
+        this.instructions = new Picture(PADDING, PADDING, "instructionsMoves.png");
         this.menu = new Picture(PADDING, PADDING, "menu.png");
         this.playersNumber = new Picture(PADDING, PADDING, "playersNumber.png");
         //this.boardGame = new Picture(PADDING, PADDING, "boardGame.png");
@@ -84,6 +86,7 @@ public class MainMenuGFX implements KeyboardHandler {
         this.arrow.delete();
         this.menu.delete();
         this.instructions.draw();
+        this.instructionsPage1 = true;
 /*        keyboardRemoveMainMenu();
         keyboardInit();*/
     }
@@ -101,11 +104,6 @@ public class MainMenuGFX implements KeyboardHandler {
         this.menu.delete();
         this.instructions.delete();
         this.playersNumber.delete();
-    }
-
-
-    public void showFinished() {
-        this.finished.draw();
     }
 
     public void keyboardInit() {
@@ -200,6 +198,7 @@ public class MainMenuGFX implements KeyboardHandler {
                     switch (arrowPosition) {
                         case ARROWPOSITION1:
                             showPlayersNumber();
+                            playersNumberPage = true;
                             break;
                         case ARROWPOSITION2:
                             showInstructions();
@@ -267,8 +266,34 @@ public class MainMenuGFX implements KeyboardHandler {
                 break;
 
             case KeyboardEvent.KEY_SPACE:
-                showMainMenu();
-                break;
+
+                System.out.println(instructionsPage1);
+
+                if (playersNumberPage){
+                    this.playersNumber.delete();
+                    this.playersNumberPage = false;
+                    showMainMenu();
+                    break;
+                }
+
+
+                if (instructionsPage1) {
+                    this.instructions.delete();
+                    this.instructions = new Picture(PADDING, PADDING, "instructionsSquares.png");
+                    this.instructions.draw();
+                    this.playersNumberPage = false;
+                    this.instructionsPage2 = true;
+                    this.instructionsPage1 = false;
+                    break;
+                }
+
+                if (instructionsPage2) {
+                    this.instructions.delete();
+                    this.instructions = new Picture(PADDING, PADDING, "instructionsMoves.png");
+                    this.instructionsPage2 = false;
+                    showMainMenu();
+                    break;
+                }
         }
     }
 
